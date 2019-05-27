@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <table class="table table-striped mt-4">
+        <thead>
+        <tr>
+            <th scope="col">Product name</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Price</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <h2 class="">{{ product.name }}</h2>
+                </td>
+                <td>
+                    <input name="name" value="{{ product.name }}" style="display: none">
+                    <input name="price" value="{{ product.price }}" style="display: none">
+                </td>
+                <td>
+                    <div class="container mt-2">
+                        <span>{{ product.price }} lei</span>
+                    </div>
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-primary ml-4">Submit</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+
+
+
+{#    <form action="{{ path('bill_action') }}" method="post" class="form-inline">#}
+{#        <table class="table table-striped mt-4">#}
+{#            <thead>#}
+{#            <tr>#}
+{#                <th scope="col">Product name</th>#}
+{#                <th scope="col">Quantity</th>#}
+{#                <th scope="col">Price</th>#}
+{#                <th scope="col"></th>#}
+{#            </tr>#}
+{#            </thead>#}
+{#            <tbody>#}
+{#                <tr>#}
+{#                    <td>#}
+{#                        <h2 class="">{{ product.name }}</h2>#}
+{#                    </td>#}
+{#                    <td>#}
+{#                        <input class="form-control col-5" type="number" value="0" min="0" max="{{ product.stock }}" id="quantity" name="quantity">#}
+{#                        <input name="name" value="{{ product.name }}" style="display: none">#}
+{#                        <input name="price" value="{{ product.price }}" style="display: none">#}
+{#                    </td>#}
+{#                    <td>#}
+{#                        <div class="container mt-2">#}
+{#                            <span>{{ product.price }} lei</span>#}
+{#                        </div>#}
+{#                    </td>#}
+{#                    <td>#}
+{#                        <button type="submit" class="btn btn-primary ml-4">Submit</button>#}
+{#                    </td>#}
+{#                </tr>#}
+{#            </tbody>#}
+{#    </table>#}
+{% endblock %}
