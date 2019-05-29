@@ -4,6 +4,7 @@
 namespace AppBundle\Repository;
 
 
+use AppBundle\Entity\Product;
 use Doctrine\ORM\EntityRepository;
 
 class ProductsRepository extends EntityRepository
@@ -19,5 +20,11 @@ class ProductsRepository extends EntityRepository
             ->setParameter("name", $name)
             ->getQuery()
             ->execute();
+    }
+
+    public function findOneByName($name)
+    {
+        $product["name"] = $name;
+        return $this->findOneBy($product);
     }
 }

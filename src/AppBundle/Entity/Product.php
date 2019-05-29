@@ -18,7 +18,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *     message="Department for given name already exists in database."
  * )
  */
-class Products
+class Product
 {
     /**
      * @ORM\Id
@@ -33,7 +33,7 @@ class Products
     private $name;
 
     /**
-     * @ORM\Column(type="decimal",precision=5, scale=2)
+     * @ORM\Column(type="decimal",precision=7, scale=2)
      */
     private $price;
 

@@ -24,10 +24,9 @@ class DepartmentRepository extends EntityRepository
 
     public function getAll()
     {
-
         $departments = [];
         /** @var Department $department */
-        foreach ($this->findAll() as $department){
+        foreach ($this->findAll() as $department) {
             $departments[$department->getName()] = $department->getId();
         }
 

@@ -1,29 +1,8 @@
 {% extends 'base.html.twig' %}
 
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
 {% block body %}
     {{ form_start(form) }}
-    {{ form_widget(form) }}
     {{ form_end(form) }}
-
-{#    <form action="{{ path('update_action') }}" method="post">#}
-{#        <label for="name">Enter name</label>#}
-{#        <input type="text" id="name" name="name">#}
-{#        </br>#}
-{#        <label for="price">Enter price</label>#}
-{#        <input type="number" step="any" id="price" name="price">#}
-{#        </br>#}
-{#        <label>Enter stock</label>#}
-{#        <input type="number" name="stock">#}
-{#        </br>#}
-{#        <div class="form-group col-md-4">#}
-{#            <label for="department">Department</label>#}
-{#            <select id="department" class="form-control" name="department">#}
-{#                <option selected>Choose...</option>#}
-{#                {% for department in departments %}#}
-{#                    <option value="{{ department.id }}">{{ department.name }}</option>#}
-{#                {% endfor %}#}
-{#            </select>#}
-{#        </div>#}
-{#        <button type="submit">Submit</button>#}
-{#    </form>#}
 {% endblock %}

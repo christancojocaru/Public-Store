@@ -1,38 +1,36 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    {{ form_start(form) }}
     <table class="table table-striped mt-4">
         <thead>
         <tr>
+            <th scope="col">#</th>
             <th scope="col">Product name</th>
-            <th scope="col">Quantity</th>
             <th scope="col">Price</th>
+            <th scope="col">Quantity</th>
             <th scope="col"></th>
         </tr>
         </thead>
         <tbody>
             <tr>
-                <td>
-                    <h2 class="">{{ product.name }}</h2>
-                </td>
-                <td>
-                    <input name="name" value="{{ product.name }}" style="display: none">
-                    <input name="price" value="{{ product.price }}" style="display: none">
-                </td>
+                <td scope="row">1</td>
+                <td><h2 class="">{{ product.name }}</h2></td>
                 <td>
                     <div class="container mt-2">
                         <span>{{ product.price }} lei</span>
                     </div>
                 </td>
                 <td>
-                    <button type="submit" class="btn btn-primary ml-4">Submit</button>
+                    {{ form_errors(form.quantity) }}
+                    {{ form_widget(form.quantity) }}
+                </td>
+                <td>
+                    {{ form_widget(form.submit) }}
                 </td>
             </tr>
         </tbody>
     </table>
-
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
     {{ form_end(form) }}
 
 
