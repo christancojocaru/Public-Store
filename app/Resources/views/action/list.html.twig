@@ -1,11 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script type="text/javascript" src="{{ asset('js/Row.js') }}" ></script>
-    <script type="text/javascript" src="{{ asset('js/cart_on_same_page.js') }}" ></script>
-{% endblock %}
-
 {% block body %}
     {% include 'action/modal/modal.html.twig' %}
     {% block modal %}{% endblock %}

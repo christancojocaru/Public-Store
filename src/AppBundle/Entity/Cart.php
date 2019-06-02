@@ -8,7 +8,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CartRepository")
  * @ORM\Table(
  *     name="cart",
  *     uniqueConstraints={@ORM\UniqueConstraint(columns={"product_id", "user_id"})}

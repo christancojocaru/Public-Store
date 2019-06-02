@@ -30,9 +30,23 @@ class ActionController extends Controller
      */
     public function nameAndStockAction(Request $request)
     {
-        $parameters = $request->request->all();
-        if (isset($parameters['product_id'])) {
-            $product = $this->getDoctrine()->getRepository(Product::class)->find($parameters['product_id']);
+        $currentUser = $this->get("security.token_storage")->getToken()->getUser()->getId();
+
+        $userCarts = $this->getDoctrine()->getRepository(Cart::class)->findByUserId($currentUser);
+
+        $productId = $request->request->get('product_id');
+
+        foreach ($userCarts as $userCart) {
+            if ($userCart->getProduct()->getId() == $productId) {
+                break;//need an update
+            }else {
+                $product = $this->getDoctrine()->getRepository(Product::class)->find($productId);
+
+
+            }
+        }
+
+        if (isset($parameters)) {
             if (!is_null($product)) {
                 $arrayProduct = [
                     'name' => $product->getName(),
@@ -46,35 +60,6 @@ class ActionController extends Controller
         }
 
         return new Response("Incorect parameter");
-    }
-
-    /**
-     * @Route("/addtoCart", methods={"POST"})
-     * @param Request $request
-     * @return JsonResponse|Response
-     */
-    public function addtoCartAction(Request $request)
-    {
-
-        $parameters = $request->request->all();
-        $product = $this->getDoctrine()->getRepository(Product::class)->find($parameters['product_id']);
-
-        if($parameters['quantity'] > $product->getStock() || $parameters['quantity'] < 0) {
-            return new Response("The quantity is above the limit that we can supply!");
-        }
-
-        if (!is_null($product)) {
-            $arrayProduct = [
-                'id' => $product->getId(),
-                'name' => $product->getName(),
-                'quantity' => $parameters['quantity'],
-                'totalPrice' => $product->getPrice() * intval($parameters['quantity']),
-            ];
-
-            return new JsonResponse($arrayProduct);
-        };
-
-        return new Response("Product not found or quantity is not a number!");
     }
 
     /**
@@ -189,19 +174,22 @@ class ActionController extends Controller
 
     /**
      * @Route("/cart/new", name="new_cart")
+     * @param Request $request
+     * @return Response
      */
-    public function newCartAction()
+    public function newCartAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+        $productId = $request->request->get("product_id");
+        $quantity = $request->request->get("quantity");
 
-        $product = $em->getRepository(Product::class)->find(9);
-
-        $user = $em->getRepository(User::class)->find(2);
+        $product = $em->getRepository(Product::class)->find($productId);
 
         $cart = new Cart();
-        $cart->setQuantity(20);
+        $cart->setQuantity($quantity);
         $cart->setProduct($product);
-        $cart->setUser($user);
+        $cart->setUser($currentUser);
         $em->persist($cart);
         $em->flush();
 

@@ -1,9 +1,4 @@
-function addToCart(productId)
-{
-    cartOnSamePage(productId);
-}
-
-function ajaxNameAndStock(productId, quantityInputValue = 1, labelText, isOnTable) {
+function addToCart(productId) {
     let data = {'product_id': productId};
     $.ajax({
         type: "POST",
@@ -11,13 +6,11 @@ function ajaxNameAndStock(productId, quantityInputValue = 1, labelText, isOnTabl
         data: data,
         success: function(success){
             $("#strongQuantity").text(" " + success.name);
-            $("#labelQuantity").text(labelText);
+            $("#labelQuantity").text("Select quantity for ");
             $("#quantity").attr("max", success.stock);
-            $("#quantity").val(quantityInputValue);
+            $("#quantity").val(1);
             $("#quantity").prop("disabled", false);
-            $("#addToCartModalButton").prop("disabled", false);
             $("#addToCartModalButton").attr("data-product-id", productId);
-            $("#addToCartModalButton").attr("data-is-on-table", isOnTable);
         },
         error: function (error){
             if (error.status == 500) {
@@ -42,20 +35,14 @@ $("#addToCartModalButton").click(function () {
 
     $.ajax({
         type: "POST",
-        url: "addtoCart",
+        url: "cart/new",
         data: data,
-        success: function (product) {
-            let addToCart = $("#addToCartModalButton");
-            if ( addToCart.attr('data-is-on-table') === "true") {
-                updateRow(product);
-            }else {
-                createRow(product);
-            }
-            closeModal();
+        success: function (success) {
+            window.alert(success);
+            $("#close").click();
         },
         error: function (error) {
             window.alert(error.responseText);
-        },
-        dataType: "json"
+        }
     });
 });
