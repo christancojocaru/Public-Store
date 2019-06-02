@@ -1,0 +1,8 @@
+AppBundle\Entity\User:
+  user_{1..4}:
+    email: cristi_<current()>@gmail.com
+    plainPassword: cristi
+
+AppBundle\Entity\Department:
+  department_{1..3}:
+    name: <department()>

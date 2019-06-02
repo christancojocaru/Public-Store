@@ -25,7 +25,10 @@ class Department
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="Product", mappedBy="department")
+     * @ORM\OneToMany(
+     *     targetEntity="Product",
+     *     mappedBy="department"
+     * )
      */
     private $products;
     /**

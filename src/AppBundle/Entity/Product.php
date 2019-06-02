@@ -51,7 +51,6 @@ class Product
      *     name="department_id",
      *     referencedColumnName="id",
      *     nullable=false,
-     *     onDelete="CASCADE"
      * )
      */
     private $department;

@@ -4,13 +4,14 @@
 namespace AppBundle\Controller;
 
 
+use AppBundle\Entity\Cart;
 use AppBundle\Entity\Department;
 use AppBundle\Entity\Product;
+use AppBundle\Entity\User;
 use AppBundle\Service\ExportCSV;
 use AppBundle\Service\ModifyProduct;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -56,36 +57,45 @@ class ActionController extends Controller
     {
 
         $parameters = $request->request->all();
-        if (isset($parameters['product_id']) && isset($parameters['quantity'])) {
-            $product = $this->getDoctrine()->getRepository(Product::class)->find($parameters['product_id']);
-            if (!is_null($product)) {
-                $arrayProduct = [
-                    'id' => $product->getId(),
-                    'name' => $product->getName(),
-                    'quantity' => $parameters['quantity'],
-                    'totalPrice' => $product->getPrice() * intval($parameters['quantity']),
-                ];
+        $product = $this->getDoctrine()->getRepository(Product::class)->find($parameters['product_id']);
 
-                return new JsonResponse($arrayProduct);
-            };
-
-            return new Response("Product not found or quantity is not a number!");
+        if($parameters['quantity'] > $product->getStock() || $parameters['quantity'] < 0) {
+            return new Response("The quantity is above the limit that we can supply!");
         }
 
-        return new Response("Incorect parameter");
+        if (!is_null($product)) {
+            $arrayProduct = [
+                'id' => $product->getId(),
+                'name' => $product->getName(),
+                'quantity' => $parameters['quantity'],
+                'totalPrice' => $product->getPrice() * intval($parameters['quantity']),
+            ];
+
+            return new JsonResponse($arrayProduct);
+        };
+
+        return new Response("Product not found or quantity is not a number!");
     }
 
     /**
-     * @Route("/list")
+     * @Route("/list", name="list_action")
      * @return Response
      */
     public function items()
     {
+        /**@var User $user */
+        $user = $this->getUser();
+
         $products = $this->getDoctrine()->getRepository(Product::class)->findAll();
+        $department = array();
+
+        foreach ($products as $product) {
+            $department[$product->getDepartment()->getName()][] = $product;
+        }
 
         return $this->render(
             "action/list.html.twig", [
-                "products" => $products
+                "department" => $department
             ]
         );
     }
@@ -176,54 +186,46 @@ class ActionController extends Controller
         );
     }
 
+
     /**
-     * @Route("/cart/{name}", name="cart")
+     * @Route("/cart/new", name="new_cart")
+     */
+    public function newCartAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $product = $em->getRepository(Product::class)->find(9);
+
+        $user = $em->getRepository(User::class)->find(2);
+
+        $cart = new Cart();
+        $cart->setQuantity(20);
+        $cart->setProduct($product);
+        $cart->setUser($user);
+        $em->persist($cart);
+        $em->flush();
+
+        return new Response("Cart added.");
+    }
+
+    /**
+     * @Route("/cart", name="cart")
      * @return Response
      */
-    public function cart($name, Request $request)
+    public function cart(Request $request)
     {
-        /**
-         * @var Product $product
-         */
-        $product = current($this->getDoctrine()->getRepository(Product::class)->findByName($name));
+        $currentUser= $this->get('security.token_storage')->getToken()->getUser();
 
-        $form = $this->createFormBuilder()
-            ->add('id', HiddenType::class, ['data' => $product->getId()])
-            ->add('quantity', IntegerType::class, [
-                'data' => 1,
-                'attr' => [
-                    'max' => $product->getStock(),
-                    'min' => 1
-                ]
-            ])
-            ->add('submit', SubmitType::class, ['label' => 'Export CSV'])
-            ->getForm();
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            $productId = $form->getData()['id'];
-
-            $submittedProduct = $this->getDoctrine()->getRepository(Product::class)->find($productId);
-            $name = $submittedProduct->getName();
-            $price = $submittedProduct->getPrice();
-
-            $quantity = $form->getData()["quantity"];
-
-
-            $list = array(
-                array('No.', 'Product Name', 'Quantity', 'Price per product', 'Total Price'),
-                array('1', $name, $quantity, $price, $quantity * $price)
-            );
-            $e = new ExportCSV;
-            $e->exportCSV($list);
-
+        if ($currentUser == "anon.") {
+            return $this->redirectToRoute("security_login");
         }
+
+        $cart = $this->getDoctrine()->getRepository(Cart::class)->findBy(["user" => $currentUser]);
+
+
         return $this->render(
             "action/cart.html.twig", [
-                "form" => $form->createView(),
-                "product" => $product
+                "cart" => $cart
         ]);
     }
 }

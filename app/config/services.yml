@@ -29,7 +29,13 @@ services:
         public: true
         tags: ['controller.service_arguments']
 
+    AppBundle\Doctrine\HashPasswordListener:
+        tags: ['doctrine.event_subscriber']
+
     # add more services, or override services that need manual wiring
     # AppBundle\Service\ExampleService:
     #     arguments:
     #         $someArgument: 'some_value'
+#    AppBundle\Command\FixturesProductsCommand:
+#        calls:
+#            - [setEntityManager, ['@doctrine.orm.entity_manager']]
