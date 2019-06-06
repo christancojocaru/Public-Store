@@ -7,8 +7,6 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Cart;
 use AppBundle\Entity\Department;
 use AppBundle\Entity\Product;
-use AppBundle\Entity\User;
-use AppBundle\Service\ExportCSV;
 use AppBundle\Service\ModifyProduct;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -24,13 +22,28 @@ use Symfony\Component\Routing\Annotation\Route;
 class ActionController extends Controller
 {
     /**
+     * @Route("/", name="homepage_action")
+     * @return Response
+     */
+    public function items()
+    {
+        $products = $this->getDoctrine()->getRepository(Product::class)->findAll();
+
+        return $this->render(
+            "action/homepage.html.twig", [
+                "products" => $products
+            ]
+        );
+    }
+
+    /**
      * @Route("/nameAndStock", name="name_and_stock", methods={"POST"})
      * @param Request $request
      * @return JsonResponse|Response
      */
     public function nameAndStockAction(Request $request)
     {
-        $currentUser = $this->get("security.token_storage")->getToken()->getUser()->getId();
+        $currentUser = $this->getUser()->getId();
 
         $userCarts = $this->getDoctrine()->getRepository(Cart::class)->findByUserId($currentUser);
 
@@ -60,29 +73,6 @@ class ActionController extends Controller
         }
 
         return new Response("Incorect parameter");
-    }
-
-    /**
-     * @Route("/list", name="list_action")
-     * @return Response
-     */
-    public function items()
-    {
-        /**@var User $user */
-        $user = $this->getUser();
-
-        $products = $this->getDoctrine()->getRepository(Product::class)->findAll();
-        $department = array();
-
-        foreach ($products as $product) {
-            $department[$product->getDepartment()->getName()][] = $product;
-        }
-
-        return $this->render(
-            "action/list.html.twig", [
-                "department" => $department
-            ]
-        );
     }
 
     /**
@@ -180,7 +170,7 @@ class ActionController extends Controller
     public function newCartAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
+        $currentUser = $this->getUser();
         $productId = $request->request->get("product_id");
         $quantity = $request->request->get("quantity");
 
@@ -204,16 +194,12 @@ class ActionController extends Controller
     {
         $currentUser= $this->get('security.token_storage')->getToken()->getUser();
 
-        if ($currentUser == "anon.") {
-            return $this->redirectToRoute("security_login");
-        }
-
-        $cart = $this->getDoctrine()->getRepository(Cart::class)->findBy(["user" => $currentUser]);
+        $carts = $this->getDoctrine()->getRepository(Cart::class)->findBy(["user" => $currentUser]);
 
 
         return $this->render(
             "action/cart.html.twig", [
-                "cart" => $cart
+                "carts" => $carts
         ]);
     }
 }

@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block container %}
+    {{ form_start(form) }}
+    {{ form_row(form.username) }}
+    {{ form_row(form.plainPassword.first) }}
+    {{ form_row(form.plainPassword.second) }}
+    {{ form_row(form.userProfile.firstname) }}
+    {{ form_row(form.userProfile.lastname) }}
+    {{ form_row(form.userProfile.email) }}
+    {{ form_row(form.userProfile.mobileNumber) }}
+    {{ form_row(form.userProfile.address) }}
+    {{ form_row(form.userProfile.city) }}
+    {{ form_row(form.userProfile.country) }}
+
+    <button type="submit" >sadasdfgdfgsdfg</button>
+    {{ form_end(form) }}
+{% endblock %}

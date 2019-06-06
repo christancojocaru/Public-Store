@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity
  * @ORM\Table(name="user")
- * @UniqueEntity(fields={"email"}, message="It looks like you already have an account!")
+ * @UniqueEntity(fields={"username"}, message="It looks like you already have an account!")
  */
 class User implements UserInterface
 {
@@ -24,11 +24,9 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @Assert\NotBlank()
-     * @Assert\Email()
      * @ORM\Column(type="string", unique=true)
      */
-    private $email;
+    private $username;
 
     /**
      * The Encoded password
@@ -38,9 +36,16 @@ class User implements UserInterface
     private $password;
 
     /**
+     * One User has One UserProfile.
+     * @ORM\OneToOne(targetEntity="UserProfile")
+     * @ORM\JoinColumn(name="user_profile_id", referencedColumnName="id")
+     */
+    private $userProfile;
+
+    /**
      * A non-persisted field that's used to create the encoded password.
-     * @Assert\NotBlank()
      *
+     * @Assert\NotBlank(groups={"Registration"})
      * @var string
      */
     private $plainPassword;
@@ -51,30 +56,11 @@ class User implements UserInterface
     private $roles = [];
 
     /**
-     * @param mixed $roles
+     * @param mixed $username
      */
-    public function setRoles(array $roles)
+    public function setUsername($username)
     {
-        $this->roles = $roles;
-    }
-
-
-    public function getSalt()
-    {
-        // leaving blank - I don't need/have a password!
-    }
-
-    public function eraseCredentials()
-    {
-        $this->plainPassword = null;
-    }
-
-    /**
-     * @param mixed $email
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
+        $this->username = $username;
     }
 
     /**
@@ -83,6 +69,14 @@ class User implements UserInterface
     public function setPassword($password)
     {
         $this->password = $password;
+    }
+
+    /**
+     * @param mixed $userProfile
+     */
+    public function setUserProfile($userProfile)
+    {
+        $this->userProfile = $userProfile;
     }
 
     /**
@@ -97,6 +91,14 @@ class User implements UserInterface
     }
 
     /**
+     * @param mixed $roles
+     */
+    public function setRoles(array $roles)
+    {
+        $this->roles = $roles;
+    }
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -107,17 +109,9 @@ class User implements UserInterface
     /**
      * @return mixed
      */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getUsername()
     {
-        return $this->email;
+        return $this->username;
     }
 
     /**
@@ -126,6 +120,14 @@ class User implements UserInterface
     public function getPassword()
     {
         return $this->password;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserProfile()
+    {
+        return $this->userProfile;
     }
 
     /**
@@ -142,5 +144,15 @@ class User implements UserInterface
     public function getRoles()
     {
         return $this->roles;
+    }
+
+    public function getSalt()
+    {
+        // leaving blank - I don't need/have a password!
+    }
+
+    public function eraseCredentials()
+    {
+        $this->plainPassword = null;
     }
 }

@@ -24,14 +24,15 @@ class UserController extends Controller
         $form = $this->createForm(UserRegistrationForm::class);
 
         $form->handleRequest($request);
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             /** @var User $user */
             $user = $form->getData();
+            $user->setRoles(["ROLE_USER"]);
+            $userProfile = $user->getUserProfile();
             $em = $this->getDoctrine()->getManager();
+            $em->persist($userProfile);
             $em->persist($user);
             $em->flush();
-
-            $this->addFlash('success', 'Welcome ' . $user->getEmail());
 
             return $this->get('security.authentication.guard_handler')
                 ->authenticateUserAndHandleSuccess(
@@ -42,9 +43,9 @@ class UserController extends Controller
                 );
         }
 
-        return $this->render('user/register.html.twig', [
-            'form' => $form->createView()
-        ]);
-
+        return $this->render(
+            'security/register.html.twig', [
+                "form" => $form->createView()
+            ]);
     }
 }

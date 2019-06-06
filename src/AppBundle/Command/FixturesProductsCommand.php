@@ -5,6 +5,7 @@ namespace AppBundle\Command;
 use AppBundle\Entity\Department;
 use AppBundle\Entity\Product;
 use AppBundle\Entity\User;
+use AppBundle\Entity\UserProfile;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -45,31 +46,24 @@ class FixturesProductsCommand extends Command
             }
         }
 
-        foreach ($this->users() as $user) {
-            $newUser = new User();
-            $newUser->setEmail($user["email"]);
-            $newUser->setPlainPassword($user["plainPassword"]);
-            $newUser->setRoles($user["role"]);
-            $this->entityManager->persist($newUser);
-        }
+        $newUserProfile = new UserProfile();
+        $newUserProfile->setFirstName("cristi");
+        $newUserProfile->setLastName("marian");
+        $newUserProfile->setEmail("mihai@yahoo.com");
+        $newUserProfile->setMobileNumber('0731016859');
+        $newUserProfile->setAddress("Cal. Targovistei");
+        $newUserProfile->setCity("Gura Ocnitei");
+        $newUserProfile->setCountry("RO");
+        $this->entityManager->persist($newUserProfile);
+
+        $newUser = new User();
+        $newUser->setUsername("mihai");
+        $newUser->setUserProfile($newUserProfile);
+        $newUser->setPlainPassword("mihai");
+        $newUser->setRoles(["ROLE_USER"]);
+        $this->entityManager->persist($newUser);
 
         $this->entityManager->flush();
-    }
-
-    private function users()
-    {
-        return [
-            "user1" => [
-                "email" => "cristi@yahoo.com",
-                "plainPassword" => "cristi",
-                "role" => ["ROLE_ADMIN"]
-            ],
-            "user2" => [
-                "email" => "mihai@gmail.com",
-                "plainPassword" => "mihai",
-                "role" => ["ROLE_USER"]
-            ]
-        ];
     }
 
     private function departments()

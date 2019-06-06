@@ -1,35 +1,53 @@
-{% include 'main/navigation.html.twig' %}
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-        <meta charset="UTF-8" />
-        <title>{% block title %}Cristian Store{% endblock %}</title>
+        <meta charset="utf-8" />
+        {% block title %}
+            <title>Cristian Store</title>
+        {% endblock %}
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="width=device-width, initial-scale=1" name="viewport" />
+        <meta content="Cristian Store" name="description" />
+        <meta content="Cristian Cojocaru" name="author" />
         {% block stylesheets %}
-            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-            <link rel="stylesheet"  type="text/css" href="{{ asset('css/style.css') }}">
+        <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('css/simple-line-icons.min.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('css/bootstrap-switch.min.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('css/components.min.css') }}" rel="stylesheet" id="style_components" type="text/css" />
+        <link href="{{ asset('css/plugins.min.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('css/layout.min.css') }}" rel="stylesheet" type="text/css" />
         {% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
-    <body>
-    {% block navigation %}{% endblock %}
-        <div class="main-content">
-            {% for msg in app.session.flashBag.get('success') %}
-                <div class="alert alert-success">
-                    {{ msg }}
-                </div>
-            {% endfor %}
-
-            {% block body %}{% endblock %}
-        </div>
-        <div class="footer stikybottom">
-            <p class="footer-text">Made by Cristian Cojocaru</p>
-        </div>
-        {% block javascripts %}
-            <script type="text/javascript" src="{{ asset('js/functions.js') }}" ></script>
-        {% endblock %}
-    </body>
+    {% block container %}
+        <body>
+            <div class="wrapper">
+                {% block header %}
+                    {% include 'header.html.twig' %}
+                {% endblock %}
+                {% block body %}{% endblock %}
+                {% block footer %}
+                    <div>
+                        <p class="copyright"> 2019 &copy; Metronic Theme By
+                            <a target="_blank" href="http://keenthemes.com">Keenthemes</a> &nbsp;|&nbsp;
+                            <a target="_blank" href="#">Cristian Cojocaru</a>
+                        </p>
+                        <a href="#index" class="go2top">
+                            <i class="icon-arrow-up"></i>
+                        </a>
+                    </div>
+                {% endblock %}
+            </div>
+            {% block javascripts %}
+                <script src="{{ asset('js/jquery.min.js') }}" type="text/javascript"></script>
+                <script src="{{ asset('js/bootstrap.min.js') }}" type="text/javascript"></script>
+                <script src="{{ asset('js/js.cookie.min.js') }}" type="text/javascript"></script>
+                <script src="{{ asset('js/jquery.slimscroll.min.js') }}" type="text/javascript"></script>
+                <script src="{{ asset('js/jquery.blockui.min.js') }}" type="text/javascript"></script>
+                <script src="{{ asset('js/bootstrap-switch.min.js') }}" type="text/javascript"></script>
+                <script src="{{ asset('js/app.min.js') }}" type="text/javascript"></script>
+                <script src="{{ asset('js/layout.min.js') }}" type="text/javascript"></script>
+            {% endblock %}
+        </body>
+    {% endblock %}
 </html>
-

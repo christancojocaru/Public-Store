@@ -78,6 +78,15 @@ class Cart
     }
 
     /**
+     * @return float
+     */
+    public function getTotalPrice()
+    {
+        $price = $this->product->getPrice();
+        return $this->quantity * $price;
+    }
+
+    /**
      * @param mixed $product
      */
     public function setProduct($product)

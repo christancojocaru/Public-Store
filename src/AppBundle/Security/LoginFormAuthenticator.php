@@ -30,12 +30,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function getCredentials(Request $request)
     {
-        $isLoginSubmit = $request->getPathInfo() == '/login' && $request->isMethod('POST');
-        if (!$isLoginSubmit) {
-            // skip authentication
-            return;
-        }
-
         $form = $this->formFactory->create(LoginForm::class);
         $form->handleRequest($request);
 
@@ -53,7 +47,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         $username = $credentials['_username'];
 
         return $this->em->getRepository('AppBundle:User')
-            ->findOneBy(['email' => $username]);
+            ->findOneBy(['username' => $username]);
     }
 
     public function checkCredentials($credentials, UserInterface $user)
@@ -74,6 +68,11 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     protected function getDefaultSuccessRedirectUrl()
     {
-        return $this->router->generate('homepage');
+        return $this->router->generate('homepage_action');
+    }
+
+    public function supports(Request $request)
+    {
+        return $request->getPathInfo() == '/login' && $request->isMethod('POST');
     }
 }
