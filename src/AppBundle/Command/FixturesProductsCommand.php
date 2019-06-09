@@ -2,7 +2,8 @@
 
 namespace AppBundle\Command;
 
-use AppBundle\Entity\Department;
+use AppBundle\Entity\Categories;
+use AppBundle\Entity\Departments;
 use AppBundle\Entity\Product;
 use AppBundle\Entity\User;
 use AppBundle\Entity\UserProfile;
@@ -16,7 +17,7 @@ class FixturesProductsCommand extends Command
     /**
      * @var string
      */
-    protected static $defaultName = 'app:fixture.products';
+    protected static $defaultName = 'app:fixture.load';
 
     /**
      * @var EntityManagerInterface
@@ -31,25 +32,32 @@ class FixturesProductsCommand extends Command
 
     protected function execute(InputInterface $input,OutputInterface  $output)
     {
-        foreach ($this->departments() as $department => $products) {
-            $newDepartment = new Department();
+        foreach ($this->departments() as $department => $categories) {
+            $newDepartment = new Departments();
             $newDepartment->setName($department);
             $this->entityManager->persist($newDepartment);
 
-            foreach ($products as $product) {
-                $newProduct = new Product();
-                $newProduct->setName($product);
-                $newProduct->setStock(rand(1, 20));
-                $newProduct->setPrice(rand(10, 100) / 10);
-                $newProduct->setDepartment($newDepartment);
-                $this->entityManager->persist($newProduct);
+            foreach ($categories as $category => $products) {
+                $newCategory = new Categories();
+                $newCategory->setName($category);
+                $newCategory->setDepartment($newDepartment);
+                $this->entityManager->persist($newCategory);
+
+                foreach ($products as $product) {
+                    $newProduct = new Product();
+                    $newProduct->setName($product);
+                    $newProduct->setStock(rand(1, 30));
+                    $newProduct->setPrice(rand(100, 100000) / 100);
+                    $newProduct->setCategory($newCategory);
+                    $this->entityManager->persist($newProduct);
+                }
             }
         }
 
         $newUserProfile = new UserProfile();
         $newUserProfile->setFirstName("cristi");
         $newUserProfile->setLastName("marian");
-        $newUserProfile->setEmail("mihai@yahoo.com");
+        $newUserProfile->setEmail("cristi@yahoo.com");
         $newUserProfile->setMobileNumber('0731016859');
         $newUserProfile->setAddress("Cal. Targovistei");
         $newUserProfile->setCity("Gura Ocnitei");
@@ -57,10 +65,10 @@ class FixturesProductsCommand extends Command
         $this->entityManager->persist($newUserProfile);
 
         $newUser = new User();
-        $newUser->setUsername("mihai");
+        $newUser->setUsername("cristi");
         $newUser->setUserProfile($newUserProfile);
-        $newUser->setPlainPassword("mihai");
-        $newUser->setRoles(["ROLE_USER"]);
+        $newUser->setPlainPassword("cristi");
+        $newUser->setRoles(["ROLE_ADMIN"]);
         $this->entityManager->persist($newUser);
 
         $this->entityManager->flush();
@@ -69,25 +77,35 @@ class FixturesProductsCommand extends Command
     private function departments()
     {
         return [
-            "Fruits" => [
-                "Apple",
-                "Mandarin",
-                "Orange",
-                "Grapefruit",
-                "Lime",
-                "Pomelo"
+            "Electronics" => [
+                "SmartPhones" => [
+                    "Huawei P20 Lite",
+                    "Samsung Galaxy S8 Plus"
+                ] ,
+                "Laptops" => [
+                    "ASUS A540MA",
+                    "HP 15-da0040nq"
+                ]
             ],
-            "Furniture" => [
-                "Chair",
-                "Stool",
-                "Table",
-                "Sofa",
-                "Armchair",
-                "Bed"
+            "Appliances" => [
+                "Refrigerators" => [
+                    "Arctic AD54240P+",
+                    "Beko RDNE535E20DZM"
+                ] ,
+                "Cookers" => [
+                    "Beko FSGT62110DXO",
+                    "Samus SM 550 ABS"
+                ]
             ],
-            "Vegetables" => [
-                "Carrot",
-                "Potato"
+            "Furnitures" => [
+                "Couches" => [
+                    "Lima",
+                    "Olivia"
+                ] ,
+                "Chairs" => [
+                    "Kring Fit",
+                    "Kring Bokai"
+                ]
             ]
         ];
     }

@@ -3,14 +3,14 @@
 
 namespace AppBundle\Entity;
 
-
 use Doctrine\ORM\Mapping as ORM;
 
+
 /**
- * @ORM\Entity(repositoryClass="AppBundle\Repository\DepartmentRepository")
- * @ORM\Table(name="department")
+ * @ORM\Entity
+ * @ORM\Table(name="departments")
  */
-class Department
+class Departments
 {
     /**
      * @ORM\Id
@@ -25,19 +25,12 @@ class Department
     private $name;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="Product",
+     *@ORM\OneToMany(
+     *     targetEntity="Categories",
      *     mappedBy="department"
      * )
      */
-    private $products;
-    /**
-     * @return mixed
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
+    private $categories;
 
     /**
      * @param mixed $name
@@ -45,6 +38,14 @@ class Department
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * @param mixed $categories
+     */
+    public function setCategories($categories)
+    {
+        $this->categories = $categories;
     }
 
     /**
@@ -58,17 +59,18 @@ class Department
     /**
      * @return mixed
      */
-    public function getProducts()
+    public function getName()
     {
-        return $this->products;
+        return $this->name;
     }
 
     /**
-     * @param mixed $products
+     * @return mixed
      */
-    public function setProducts($products)
+    public function getCategories()
     {
-        $this->products = $products;
+        return $this->categories;
     }
+
 
 }

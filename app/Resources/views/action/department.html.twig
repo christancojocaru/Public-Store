@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="page-content">
+            <div class="breadcrumbs">
+                <ol class="breadcrumb">
+                    <li class="active">{{ categories|first[0].category.department.name }}</li>
+                </ol>
+            </div>
+            <div class="portlet box green-dark">
+                <div class="portlet-title">
+                    <div class="caption"> Products </div>
+                    <div class="tools"> </div>
+                </div>
+                <div class="portlet-body">
+                    <table class="table table-striped table-bordered table-hover order-column">
+                        <tbody>
+                        {% for category, products in categories %}
+                            <tr style="background-color: #00c4ff">
+                                <th colspan="4" class="text-center">
+                                    <a href="{{ path('category_action', {'id' : products[0].category.id}) }}">{{ category }}</a>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Unit Price</th>
+                                <th>Units In Stock</th>
+                                <th>Units On Order</th>
+                            </tr>
+                            {% for product in products %}
+                                <tr>
+                                    <td><a href="{{ path('show_action', {'id' : product.id}) }}">{{ product.name }}</a></td>
+                                    <td>{{ product.price }}</td>
+                                    <td>{{ product.stock }}</td>
+                                    <td>For future</td>
+                                </tr>
+                            {% endfor %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

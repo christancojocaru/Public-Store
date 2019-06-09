@@ -11,7 +11,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ProductsRepository")
  * @ORM\Table(
  *     name="products",
- *     uniqueConstraints={@ORM\UniqueConstraint(columns={"name", "department_id"})}
+ *     uniqueConstraints={@ORM\UniqueConstraint(columns={"name", "category_id"})}
  *     )
  * @UniqueEntity(
  *     fields={"name", "department"},
@@ -44,16 +44,48 @@ class Product
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Department",
+     *     targetEntity="Categories",
      *     inversedBy="products"
      * )
      * @ORM\JoinColumn(
-     *     name="department_id",
+     *     name="category_id",
      *     referencedColumnName="id",
      *     nullable=false,
      * )
      */
-    private $department;
+    private $category;
+
+    /**
+     * @param mixed $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @param mixed $price
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
+    }
+
+    /**
+     * @param mixed $stock
+     */
+    public function setStock($stock)
+    {
+        $this->stock = $stock;
+    }
+
+    /**
+     * @param mixed $category
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
+    }
 
     /**
      * @return mixed
@@ -72,27 +104,11 @@ class Product
     }
 
     /**
-     * @param mixed $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
      * @return mixed
      */
     public function getPrice()
     {
         return $this->price;
-    }
-
-    /**
-     * @param mixed $price
-     */
-    public function setPrice($price)
-    {
-        $this->price = $price;
     }
 
     /**
@@ -104,27 +120,10 @@ class Product
     }
 
     /**
-     * @param mixed $stock
-     */
-    public function setStock($stock)
-    {
-        $this->stock = $stock;
-    }
-
-    /**
      * @return mixed
      */
-    public function getDepartment()
+    public function getCategory()
     {
-        return $this->department;
+        return $this->category;
     }
-
-    /**
-     * @param mixed $department
-     */
-    public function setDepartment($department)
-    {
-        $this->department = $department;
-    }
-
 }

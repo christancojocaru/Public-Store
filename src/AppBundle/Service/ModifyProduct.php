@@ -4,7 +4,7 @@
 namespace AppBundle\Service;
 
 
-use AppBundle\Entity\Department;
+use AppBundle\Entity\Categories;
 use AppBundle\Entity\Product;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -19,13 +19,13 @@ class ModifyProduct
 
     public function create(array $parameters)
     {
-        $productDepartment = $this->em->getRepository(Department::class)->find($parameters["department"]);
+        $productDepartment = $this->em->getRepository(Categories::class)->find($parameters["department"]);
 
         $product = new Product();
         $product->setName($parameters["name"]);
         $product->setPrice($parameters["price"]);
         $product->setStock($parameters["stock"]);
-        $product->setDepartment($productDepartment);
+        $product->setCategory($productDepartment);
 
         $this->em->persist($product);
         $this->em->flush();

@@ -1,48 +1,41 @@
-function addToCart(productId) {
-    let data = {'product_id': productId};
-    $.ajax({
-        type: "POST",
-        url: "nameAndStock",
-        data: data,
-        success: function(success){
-            $("#strongQuantity").text(" " + success.name);
-            $("#labelQuantity").text("Select quantity for ");
-            $("#quantity").attr("max", success.stock);
-            $("#quantity").val(1);
-            $("#quantity").prop("disabled", false);
-            $("#addToCartModalButton").attr("data-product-id", productId);
-        },
-        error: function (error){
-            if (error.status == 500) {
-                $("#modalHeader").text("Internal Server Error, Please try again");
-            }
-        },
-        dataType: "json"
-    });
-}
+$("#addToCart").click(function (e) {
+    e.preventDefault();
 
-$("#addToCartModalButton").click(function () {
-    let quantity = $("#quantity").val();
-    if (!$.isNumeric(quantity)) {
-        window.alert("Please insert a number!");
-        $("#quantity").attr('type', 'number');
-        return;
-    }
+    let price = $("#_price").val();
+    let id = $("#_id").val();
     let data = {
-        'product_id': $(this).attr('data-product-id'),
-        'quantity': quantity
+        'id': id,
+        'price': price
     };
 
     $.ajax({
         type: "POST",
-        url: "cart/new",
+        url: 'addToCart',
         data: data,
         success: function (success) {
             window.alert(success);
-            $("#close").click();
         },
-        error: function (error) {
-            window.alert(error.responseText);
+    });
+});
+
+
+$("#cart_table").on('click', '.delete', function (e) {
+    e.preventDefault();
+
+    if (confirm("Are you sure to delete this row ?") == false) {
+        return;
+    }
+
+    let cartId = $(this).data("id");
+    let data = {'id' : cartId};
+    $.ajax({
+        type: 'POST',
+        url: 'deleteCart',
+        data: data,
+        error: function () {
+            window.alert("Not Found!");
+            return;
         }
     });
+    $(this).parents('tr')[0].remove();
 });

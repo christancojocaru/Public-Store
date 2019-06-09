@@ -5,14 +5,12 @@ namespace AppBundle\Entity;
 
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="user_profile")
- * @UniqueEntity(fields={"email"}, message="It looks like you already have an account!")
  */
 class UserProfile
 {
@@ -35,7 +33,7 @@ class UserProfile
 
     /**
      * @Assert\NotBlank()
-     * @Assert\Email(strict="true")
+     * @Assert\Email(message="The email '{{ value }}' is not a valid email.")
      * @ORM\Column(type="string", unique=true)
      */
     private $email;

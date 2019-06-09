@@ -25,7 +25,7 @@
                                 <img src="{{ asset('assets/layouts/layout5/img/avatar1.jpg') }}" alt=""> </button>
                             <ul class="dropdown-menu-v2" role="menu">
                                 <li>
-                                    <a href="page_user_profile_1.html">
+                                    <a href="#">
                                         <i class="icon-user"></i> My Profile
                                         <span class="badge badge-danger">1</span>
                                     </a>
@@ -44,21 +44,45 @@
                 <!-- BEGIN HEADER MENU -->
                 <div class="nav-collapse collapse navbar-collapse navbar-responsive-collapse">
                     <ul class="nav navbar-nav">
-                        <li class="dropdown dropdown-fw dropdown-fw-disabled {% if pathInfo == "/" %}active open selected{% endif %}">
+                        <li class="dropdown dropdown-fw dropdown-fw-disabled {% if pathInfo == "/list" %}active open selected{% endif %}">
                             <a href="javascript:;" class="text-uppercase">
                                 <i class="icon-home"></i> Homepage </a>
                             <ul class="dropdown-menu dropdown-menu-fw">
-                                <li class="active">
-                                    <a href="index.html">
-                                        <i class="icon-bar-chart"></i> Default </a>
+                                <li class="dropdown more-dropdown-sub">
+                                    <a href="{{ path('department_action', {'id' : 1}) }}">
+                                        <i class="icon-diamond"></i> Electronics </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="{{ path('category_action', {'id' : 1}) }}"> SmartPhones </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('category_action', {'id' : 2}) }}"> Laptops </a>
+                                        </li>
+                                    </ul>
                                 </li>
-                                <li>
-                                    <a href="dashboard_2.html">
-                                        <i class="icon-bulb"></i> Dashboard 2 </a>
+                                <li class="dropdown more-dropdown-sub">
+                                    <a href="{{ path('department_action', {'id' : 2}) }}">
+                                        <i class="icon-diamond"></i> Appliances </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="{{ path('category_action', {'id' : 3}) }}"> Refrigerators </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('category_action', {'id' : 4}) }}"> Cookers </a>
+                                        </li>
+                                    </ul>
                                 </li>
-                                <li>
-                                    <a href="dashboard_3.html">
-                                        <i class="icon-graph"></i> Dashboard 3 </a>
+                                <li class="dropdown more-dropdown-sub">
+                                    <a href="{{ path('department_action', {'id' : 3}) }}">
+                                        <i class="icon-diamond"></i> Furnitures </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="{{ path('category_action', {'id' : 5}) }}"> Couches </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('category_action', {'id' : 6}) }}"> Chairs </a>
+                                        </li>
+                                    </ul>
                                 </li>
                             </ul>
                         </li>
@@ -67,15 +91,15 @@
                                 <i class="icon-user"></i> User </a>
                             <ul class="dropdown-menu dropdown-menu-fw">
                                 <li class="active">
-                                    <a href="index.html">
+                                    <a href="">
                                         <i class="fa fa-user"></i> Profile </a>
                                 </li>
                                 <li>
-                                    <a href="dashboard_2.html">
+                                    <a href="">
                                         <i class="fa fa-user"></i> Account </a>
                                 </li>
                                 <li>
-                                    <a href="{{ path('cart') }}">
+                                    <a href="{{ path('cart_action') }}">
                                         <i class="fa fa-shopping-cart"></i> Cart </a>
                                 </li>
                             </ul>

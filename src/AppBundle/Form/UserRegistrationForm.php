@@ -15,8 +15,14 @@ class UserRegistrationForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('userProfile', UserProfileRegistrationForm::class)
-            ->add('username', TextType::class)
+            ->add('username', TextType::class, [
+                'attr' => [
+                    'placeholder' => 'Username',
+                    'class' => "form-control placeholder-no-fix",
+                    'autocomplete' => "off",
+                    'autofocus' => ""
+                ]
+            ])
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class
             ]);

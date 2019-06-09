@@ -54,11 +54,17 @@ class Cart
     private $user;
 
     /**
-     * @return mixed
+     * @return float
      */
-    public function getId()
+    public function getTotalPrice()
     {
-        return $this->id;
+        $price = $this->product->getPrice();
+        return $this->quantity * $price;
+    }
+
+    public function incrementQuantity()
+    {
+        $this->quantity += 1;
     }
 
     /**
@@ -70,23 +76,6 @@ class Cart
     }
 
     /**
-     * @return mixed
-     */
-    public function getQuantity()
-    {
-        return $this->quantity;
-    }
-
-    /**
-     * @return float
-     */
-    public function getTotalPrice()
-    {
-        $price = $this->product->getPrice();
-        return $this->quantity * $price;
-    }
-
-    /**
      * @param mixed $product
      */
     public function setProduct($product)
@@ -95,19 +84,36 @@ class Cart
     }
 
     /**
-     * @return mixed
-     */
-    public function getProduct()
-    {
-        return $this->product;
-    }
-
-    /**
      * @param mixed $user
      */
     public function setUser($user)
     {
         $this->user = $user;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getProduct()
+    {
+        return $this->product;
     }
 
     /**

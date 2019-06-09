@@ -27,4 +27,13 @@ class ProductsRepository extends EntityRepository
         $product["name"] = $name;
         return $this->findOneBy($product);
     }
+
+    public function findAllByCategory($categoryId)
+    {
+        return $this->createQueryBuilder('p')
+            ->where("p.category = :categoryId")
+            ->setParameter("categoryId", $categoryId)
+            ->getQuery()
+            ->execute();
+    }
 }

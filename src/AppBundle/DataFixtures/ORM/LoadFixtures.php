@@ -4,7 +4,7 @@
 namespace AppBundle\DataFixtures\ORM;
 
 
-use AppBundle\Entity\Department;
+use AppBundle\Entity\Categories;
 use Doctrine\Bundle\FixturesBundle\ORMFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;

@@ -25,13 +25,18 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", unique=true)
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *     min="5",
+     *     minMessage="Your username must be at least {{ limit }} characters long!",
+     * )
      */
     private $username;
 
     /**
      * The Encoded password
-     *
      * @ORM\Column(type="string")
+     *
      */
     private $password;
 
