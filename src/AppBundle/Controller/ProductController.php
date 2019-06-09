@@ -50,7 +50,7 @@ class ProductController extends Controller
         $em->persist($newCart);
         $em->flush();
 
-        return new Response("Product " . $product->getName() . "was added to your cart!");
+        return new Response("Product " . $product->getName() . " was added to your cart!");
     }
 
     /**

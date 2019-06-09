@@ -9,6 +9,13 @@ use Doctrine\ORM\EntityRepository;
 
 class CategoriesRepository extends EntityRepository
 {
+    public function createAlphabeticalQueryBuilder()
+    {
+        return $this->createQueryBuilder('categories')
+        ->orderBy('categories.name', 'ASC');
+    }
+
+
     public function findByName($name)
     {
         /**

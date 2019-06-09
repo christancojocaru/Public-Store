@@ -32,7 +32,7 @@ class Categories
      * @ORM\JoinColumn(
      *     name="department_id",
      *     referencedColumnName="id",
-     *     nullable=false
+     *     nullable=true
      * )
      */
     private $department;

@@ -5,7 +5,12 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\Categories;
 use AppBundle\Entity\Product;
+use AppBundle\Form\ProductForm;
 use AppBundle\Service\ModifyProduct;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -16,16 +21,32 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-
+/**
+ * Class ActionController
+ * @package AppBundle\Controller\Admin
+ * @Route("/admin")
+ */
 class ActionController extends Controller
 {
+    private $em;
+
     /**
-     * @Route("/admin/homepage", name="admin_homepage_action")
+     * ActionController constructor.
+     * @param EntityManagerInterface $entityManager
+     */
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->em = $entityManager;
+    }
+
+
+    /**
+     * @Route("/", name="admin_homepage_action")
      * @return Response
      */
     public function adminHomepageAction()
     {
-        $products = $this->getDoctrine()->getRepository(Product::class)->findAll();
+        $products = $this->em->getRepository(Product::class)->findBy([], ['name' => 'ASC']);
 
         return $this->render(
             "admin/action/homepage.html.twig", [
@@ -35,36 +56,19 @@ class ActionController extends Controller
     }
 
     /**
-     * @Route("/admin/create", name="admin_create_action")
+     * @Route("/create", name="admin_create_action")
      * @param Request $request
-     * @param ModifyProduct $modifyProduct
      * @return Response
      */
-    public function createAction(Request $request, ModifyProduct $modifyProduct)
+    public function createAction(Request $request)
     {
-        /**@var Categories $categories */
-        $categories = $this->getDoctrine()->getRepository(Categories::class)->getAll();
-
-        /**@var Product $product */
-        $product = new Product();
-
-        $form = $this->createFormBuilder($product)
-            ->add("name", TextType::class)
-            ->add("price", NumberType::class)
-            ->add("stock", NumberType::class)
-            ->add("categories", ChoiceType::class, [
-                'choices' => $categories
-            ])
-            ->add("submit", SubmitType::class, ["label" => "Submit"])
-            ->getForm();
-
+        $form = $this->createForm(ProductForm::class);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $parameters = $request->request->get('form');
-
-            $modifyProduct->create($parameters);
-
+        if ($form->isSubmitted()) {
+            $product = $form->getData();
+            $this->em->persist($product);
+            $this->em->flush();
             return new Response("Product was successfully created!");
         }
 
@@ -76,45 +80,28 @@ class ActionController extends Controller
     }
 
     /**
-     * @Route("/admin/update", name="admin_update_action")
+     * @Route("/{id}/edit", name="admin_edit_action")
      * @param Request $request
-     * @param ModifyProduct $modifyProduct
+     * @param Product $product
      * @return Response
      */
-    public function updateAction(Request $request, ModifyProduct $modifyProduct)
+    public function editAction(Request $request, Product $product)
     {
-        $parameters = $request->query->all();
-
-        /**@var Product $product */
-        $product = $this->getDoctrine()->getRepository(Product::class)->findOneByName($parameters);
-
         if (!$product) {
-            throw $this->createNotFoundException('Product with ' . (array_keys($parameters))[0] . '= \'' . $parameters["name"] . '\' do not exist in our store!');
+            throw $this->createNotFoundException(sprintf('Product with name %s do not exist in our store!', $product->getName()));
         }
 
-        $form = $this->createFormBuilder($product)
-            ->add("name", TextType::class, ["data" => $product->getName()])
-            ->add("price", NumberType::class, ["data" => $product->getPrice()])
-            ->add("stock", IntegerType::class, ["data" => $product->getStock()])
-            ->add("categories", TextType::class, [
-                "data" => $product->getCategory()->getName(),
-                "disabled" => true
-            ])
-            ->add("submit", SubmitType::class, ["label" => "Submit"])
-            ->getForm();
-
+        $form = $this->createForm(ProductForm::class, $product);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $parameters = $request->request->get('form');
-
-            $modifyProduct->update($parameters, $product);
-
+            $product = $form->getData();
+            $this->em->persist($product);
+            $this->em->flush();
             return new Response("Product was successfully updated!");
         }
 
         return $this->render(
-            "admin/action/update.html.twig", [
+            "admin/action/edit.html.twig", [
                 "form" => $form->createView()
             ]
         );

@@ -4,7 +4,6 @@
 namespace AppBundle\Controller;
 
 
-use AppBundle\Entity\Cart;
 use AppBundle\Entity\Categories;
 use AppBundle\Entity\Product;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -18,7 +17,7 @@ class ActionController extends Controller
      */
     public function homepageAction()
     {
-        $products = $this->getDoctrine()->getRepository(Product::class)->findAll();
+        $products = $this->getDoctrine()->getRepository(Product::class)->findBy([], ["name" => "ASC"]);
 
         return $this->render(
             "action/homepage.html.twig", [

@@ -14,8 +14,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *     uniqueConstraints={@ORM\UniqueConstraint(columns={"name", "category_id"})}
  *     )
  * @UniqueEntity(
- *     fields={"name", "department"},
- *     message="Department for given name already exists in database."
+ *     fields={"name", "category"},
+ *     message="Category for given name already exists in database."
  * )
  */
 class Product
