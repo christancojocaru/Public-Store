@@ -61,6 +61,14 @@ class UserProfile
     private $country;
 
     /**
+     * @return string
+     */
+    public function getFullName()
+    {
+        return ucfirst($this->firstName) . " " . ucfirst($this->lastName);
+    }
+
+    /**
      * @param mixed $firstName
      */
     public function setFirstName($firstName)

@@ -39,3 +39,8 @@ $("#cart_table").on('click', '.delete', function (e) {
     });
     $(this).parents('tr')[0].remove();
 });
+
+$(".form-group span").css("width", '10%');
+
+$(".input-group").css("width", '1000px');
+
