@@ -4,8 +4,10 @@
 namespace AppBundle\Repository;
 
 
+use AppBundle\Entity\Categories;
 use AppBundle\Entity\Product;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 
 class ProductsRepository extends EntityRepository
 {
@@ -35,5 +37,19 @@ class ProductsRepository extends EntityRepository
             ->setParameter("categoryId", $categoryId)
             ->getQuery()
             ->execute();
+    }
+
+    public function checkProductName($productName)
+    {
+        $result = [];
+        $products = $this->findBy(["name" => $productName]);
+        if ($products) {
+            /** @var Product $product */
+            foreach ($products as $product) {
+                $result[] = $product->getName();
+            }
+        }
+
+        return $result;
     }
 }

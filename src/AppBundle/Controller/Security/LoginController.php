@@ -1,11 +1,11 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Security;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 
-class SecurityController extends Controller
+class LoginController extends Controller
 {
     /**
      * @Route("/login", name="security_login")

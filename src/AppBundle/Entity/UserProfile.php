@@ -22,41 +22,41 @@ class UserProfile
     private $id;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     private $firstName;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     private $lastName;
 
     /**
      * @Assert\NotBlank()
-     * @Assert\Email(message="The email '{{ value }}' is not a valid email.")
-     * @ORM\Column(type="string", unique=true)
+     * @Assert\Email(message="The email {{ value }} is not a valid email.")
+     * @ORM\Column(type="string", unique=true, nullable=true)
      */
     private $email;
 
     /**
-     * @ORM\Column(type="integer")
-     * @Assert\Length(min = 8, max = 20, minMessage = "min_lenght", maxMessage = "max_lenght")
-     * @Assert\Regex(pattern="/^[0-9]*$/", message="number_only")
+     * @ORM\Column(type="integer", nullable=true)
+     * @Assert\Length(min = 8, max = 9, minMessage = "Mobil number is too short!", maxMessage = "Number is too long!")
+     * @Assert\Regex(pattern="/^[0-9]*$/", message="Insert number only!")
      */
     private $mobileNumber;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     private $address;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     private $city;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     private $country;
 
@@ -130,6 +130,14 @@ class UserProfile
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id): void
+    {
+        $this->id = $id;
     }
 
     /**

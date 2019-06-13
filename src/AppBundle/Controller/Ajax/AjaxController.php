@@ -1,7 +1,7 @@
 <?php
 
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Ajax;
 
 
 use AppBundle\Entity\Cart;
@@ -12,15 +12,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class ProductController
- * @package AppBundle\Controller
- * @Route("/product")
- */
-class ProductController extends Controller
+class AjaxController extends Controller
 {
     /**
-     * @Route("/addToCart", name="add_to_cart_ajax", methods={"POST"})
+     * @Route("/product/addToCart", name="add_to_cart_ajax", methods={"POST"})
      * @param Request $request
      * @return Response
      * @throws NonUniqueResultException
@@ -53,19 +48,23 @@ class ProductController extends Controller
         return new Response("Product " . $product->getName() . " was added to your cart!");
     }
 
+
     /**
-     * @Route("/{id}", name="show_action")
-     * @param $id
+     * @Route("/user/deleteCart", name="delete_cart_ajax", methods={"POST"})
+     * @param Request $request
      * @return Response
      */
-    public function showAction($id)
+    public function deleteCartAjax(Request $request)
     {
-        $product = $this->getDoctrine()->getRepository(Product::class)->find($id);
+        $em = $this->getDoctrine()->getManager();
+        $cartId = $request->request->get("id");
+        $cartToDelete = $em->getRepository(Cart::class)->find($cartId);
+        if (!$cartToDelete) {
+            return new Response("Product not found!");
+        }
+        $em->remove($cartToDelete);
+        $em->flush();
 
-        return $this->render(
-            'action/show.html.twig', [
-                "product" => $product
-            ]
-        );
+        return new Response("Deleted successfully!");
     }
 }

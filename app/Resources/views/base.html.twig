@@ -47,6 +47,14 @@
                 <script src="{{ asset('js/bootstrap-switch.min.js') }}" type="text/javascript"></script>
                 <script src="{{ asset('js/app.min.js') }}" type="text/javascript"></script>
                 <script src="{{ asset('js/layout.min.js') }}" type="text/javascript"></script>
+                <script src="{{ asset('js/functions.js') }}" type="text/javascript"></script>
+
+                {% if is_granted("ROLE_ADMIN") %}
+                    <script src="{{ asset('js/jquery-ui.min.js') }}" type="text/javascript"></script>
+                    <script src="{{ asset('js/ui-modals.min.js') }}" type="text/javascript"></script>
+                    <script src="{{ asset('js/form-dropzone.min.js') }}" type="text/javascript"></script>
+                    <script src="{{ asset('js/dropzone_edited.min.js') }}" type="text/javascript"></script>
+                {% endif %}
             {% endblock %}
         </body>
     {% endblock %}

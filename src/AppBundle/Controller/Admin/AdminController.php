@@ -26,7 +26,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @package AppBundle\Controller\Admin
  * @Route("/admin")
  */
-class ActionController extends Controller
+class AdminController extends Controller
 {
     private $em;
 
@@ -49,7 +49,7 @@ class ActionController extends Controller
         $products = $this->em->getRepository(Product::class)->findBy([], ['name' => 'ASC']);
 
         return $this->render(
-            "admin/action/homepage.html.twig", [
+            "admin/homepage.html.twig", [
                 "products" => $products
             ]
         );
@@ -73,7 +73,7 @@ class ActionController extends Controller
         }
 
         return $this->render(
-            "admin/action/create.html.twig", [
+            "admin/create.html.twig", [
                 "form" => $form->createView()
             ]
         );
@@ -87,22 +87,21 @@ class ActionController extends Controller
      */
     public function editAction(Request $request, Product $product)
     {
-        if (!$product) {
-            throw $this->createNotFoundException(sprintf('Product with name %s do not exist in our store!', $product->getName()));
-        }
-
         $form = $this->createForm(ProductForm::class, $product);
         $form->handleRequest($request);
+        $success = "";
         if ($form->isSubmitted() && $form->isValid()) {
             $product = $form->getData();
             $this->em->persist($product);
             $this->em->flush();
-            return new Response("Product was successfully updated!");
+            $success = "Success!";
         }
 
         return $this->render(
-            "admin/action/edit.html.twig", [
-                "form" => $form->createView()
+            "admin/edit.html.twig", [
+                "form" => $form->createView(),
+                "product" => $product,
+                "success" => $success
             ]
         );
     }

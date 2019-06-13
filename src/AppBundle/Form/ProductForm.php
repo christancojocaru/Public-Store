@@ -10,6 +10,7 @@ use AppBundle\Repository\CategoriesRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -22,7 +23,7 @@ class ProductForm extends AbstractType
     {
         $builder
             ->add('name', TextType::class)
-            ->add('price', NumberType::class, ["scale" => 2])
+            ->add('price', NumberType::class, ["scale" => 4])
             ->add('stock', IntegerType::class)
             ->add('category', EntityType::class, [
                 'placeholder' => 'Choose a category',

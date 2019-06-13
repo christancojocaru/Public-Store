@@ -12,7 +12,7 @@ class CategoriesRepository extends EntityRepository
     public function createAlphabeticalQueryBuilder()
     {
         return $this->createQueryBuilder('categories')
-        ->orderBy('categories.name', 'ASC');
+            ->orderBy('categories.name', 'ASC');
     }
 
 
@@ -54,5 +54,13 @@ class CategoriesRepository extends EntityRepository
             ->setParameter("id", $id)
             ->getQuery()
             ->execute();
+    }
+
+    public function checkCategoriesName($categoryName)
+    {
+        if ($this->findBy(["name" => $categoryName])) {
+            return false;
+        }
+        return true;
     }
 }

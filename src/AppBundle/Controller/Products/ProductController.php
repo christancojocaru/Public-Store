@@ -1,7 +1,7 @@
 <?php
 
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Products;
 
 
 use AppBundle\Entity\Categories;
@@ -10,22 +10,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ActionController extends Controller
+/**
+ * Class ProductController
+ * @package AppBundle\Controller
+ * @Route("/product")
+ */
+class ProductController extends Controller
 {
-    /**
-     * @Route("/", name="homepage_action")
-     */
-    public function homepageAction()
-    {
-        $products = $this->getDoctrine()->getRepository(Product::class)->findBy([], ["name" => "ASC"]);
-
-        return $this->render(
-            "action/homepage.html.twig", [
-                "products" => $products
-            ]
-        );
-    }
-
     /**
      * @Route("/department/{id}", name="department_action")
      * @param $id
@@ -39,7 +30,7 @@ class ActionController extends Controller
         }
 
         return $this->render(
-            "action/department.html.twig", [
+            "products/department.html.twig", [
                 "categories" => $products
             ]
         );
@@ -55,8 +46,24 @@ class ActionController extends Controller
         $products = $this->getDoctrine()->getRepository(Product::class)->findAllByCategory($id);
 
         return $this->render(
-            'action/category.html.twig',[
+            'products/category.html.twig',[
             "products" =>$products
         ]);
+    }
+
+    /**
+     * @Route("/{id}", name="show_action")
+     * @param $id
+     * @return Response
+     */
+    public function showAction($id)
+    {
+        $product = $this->getDoctrine()->getRepository(Product::class)->find($id);
+
+        return $this->render(
+            'products/show.html.twig', [
+                "product" => $product
+            ]
+        );
     }
 }

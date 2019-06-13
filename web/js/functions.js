@@ -1,3 +1,7 @@
+$(".form-group span").css("width", '10%');
+
+$(".input-group").css("width", '1000px');
+
 $("#addToCart").click(function (e) {
     e.preventDefault();
 
@@ -40,7 +44,9 @@ $("#cart_table").on('click', '.delete', function (e) {
     $(this).parents('tr')[0].remove();
 });
 
-$(".form-group span").css("width", '10%');
-
-$(".input-group").css("width", '1000px');
-
+function uploadResponse(json) {
+    let data = JSON.parse(json);
+    $.each(data, function (index, value) {
+        console.log(index, " . ", value);
+    })
+}

@@ -1,11 +1,21 @@
-{% set user, pathInfo = app.user.username, app.request.pathInfo %}
+{% set user = app.user.username %}
+{% set pathInfo = app.request.pathInfo|split('/') %}
+{% if "ROLE_ADMIN" in app.user.roles() %}
+    {% set admin = 'true' %}
+{% endif %}
+
 {% block header %}
     <header class="page-header">
         <nav class="navbar mega-menu" role="navigation">
             <div class="container-fluid">
                 <div class="clearfix navbar-fixed-top">
                     <!-- BEGIN LOGO -->
-                    <a id="index" class="page-logo" href="{{ path('homepage_action') }}">
+                    <a id="index" class="page-logo"
+                        {% if admin is defined %}
+                            href="{{ path('admin_homepage_action') }}"
+                        {% else %}
+                            href="{{ path('homepage_action') }}"
+                        {% endif %}>
                         <img src="{{ asset('img/logo.png') }}" alt="Logo"> </a>
                     <!-- END LOGO -->
                     <!-- BEGIN SEARCH -->
@@ -16,13 +26,12 @@
                         </a>
                     </form>
                     <!-- END SEARCH -->
-                    <!-- BEGIN TOPBAR ACTIONS -->
                     <div class="topbar-actions">
                         <!-- BEGIN USER PROFILE -->
                         <div class="btn-group-img btn-group">
                             <button type="button" class="btn btn-sm md-skip dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                 <span>Hi, {{ user }}</span>
-                                <img src="{{ asset('assets/layouts/layout5/img/avatar1.jpg') }}" alt=""> </button>
+                                <img src="{{ asset('img/profile_user.jpg') }}" alt=""> </button>
                             <ul class="dropdown-menu-v2" role="menu">
                                 <li>
                                     <a href="#">
@@ -39,14 +48,22 @@
                         </div>
                         <!-- END USER PROFILE -->
                     </div>
-                    <!-- END TOPBAR ACTIONS -->
                 </div>
                 <!-- BEGIN HEADER MENU -->
                 <div class="nav-collapse collapse navbar-collapse navbar-responsive-collapse">
                     <ul class="nav navbar-nav">
-                        <li class="dropdown dropdown-fw dropdown-fw-disabled {% if pathInfo == "/list" %}active open selected{% endif %}">
+                        <li class="dropdown dropdown-fw dropdown-fw-disabled{% if pathInfo[1] == "admin" %}active open selected{% endif %}">
+                            <a class="text-uppercase"
+                                {% if admin is defined %}
+                                    href="{{ path('admin_homepage_action') }}"
+                                {% else %}
+                                    href="{{ path('homepage_action') }}"
+                                {% endif %}>
+                                <i class="icon-user"></i> HomePage </a>
+                        </li>
+                        <li class="dropdown dropdown-fw dropdown-fw-disabled{% if pathInfo[1] == "product" %}active open selected{% endif %}">
                             <a href="javascript:;" class="text-uppercase">
-                                <i class="icon-home"></i> Homepage </a>
+                                <i class="icon-home"></i> Products </a>
                             <ul class="dropdown-menu dropdown-menu-fw">
                                 <li class="dropdown more-dropdown-sub">
                                     <a href="{{ path('department_action', {'id' : 1}) }}">
@@ -86,27 +103,53 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="dropdown dropdown-fw dropdown-fw-disabled {% if pathInfo == "/cart" %}active open selected{% endif %}">
+                        <li class="dropdown dropdown-fw dropdown-fw-disabled {% if pathInfo[1] == "user" %}active open selected{% endif %}">
                             <a href="javascript:;" class="text-uppercase">
                                 <i class="icon-user"></i> User </a>
                             <ul class="dropdown-menu dropdown-menu-fw">
-                                <li class="active">
-                                    <a href="">
-                                        <i class="fa fa-user"></i> Profile </a>
-                                </li>
                                 <li>
                                     <a href="{{ path('user_account_action') }}">
                                         <i class="fa fa-user"></i> Account </a>
                                 </li>
                                 <li>
-                                    <a href="{{ path('cart_action') }}">
+                                    <a href="{{ path('user_cart_action') }}">
                                         <i class="fa fa-shopping-cart"></i> Cart </a>
                                 </li>
                             </ul>
                         </li>
+                        {% if admin is defined %}
+                            <li class="pull-right">
+                                <a href="#large" data-toggle="modal"> Upload Products </a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </div>
                 <!-- END HEADER MENU -->
+                {% if admin is defined %}
+                    <!-- /.modal -->
+                    <div class="modal fade bs-modal-lg" id="large" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                    <h4 class="modal-title">Modal Title</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{{ path('admin_upload_action') }}" method="post" class="dropzone dropzone-file-area" id="my-dropzone" style="width: 500px;">
+                                        <h3 class="sbold">Drop files here or click to upload</h3>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn green">Save changes</button>
+                                </div>
+                            </div>
+                            <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
+                    <!-- /.modal -->
+                {% endif %}
             </div>
             <!--/container-->
         </nav>

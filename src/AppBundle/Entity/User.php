@@ -42,7 +42,7 @@ class User implements UserInterface
 
     /**
      * One User has One UserProfile.
-     * @ORM\OneToOne(targetEntity="UserProfile")
+     * @ORM\OneToOne(targetEntity="UserProfile", cascade={"persist"})
      * @ORM\JoinColumn(name="user_profile_id", referencedColumnName="id")
      */
     private $userProfile;
