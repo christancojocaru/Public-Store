@@ -51,70 +51,28 @@
                                         <div class="tab-content">
                                             <div class="tab-pane active" id="tab_1_1">
                                                 {{ form_start(formProfile, {"attr" : {"id" : "form_profile"}}) }}
-                                                <div class="form-group">
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon input-circle-left">
-                                                            {{ form_label(formProfile.firstName) }}
-                                                        </span>
-                                                        {{ form_widget(formProfile.firstName) }}
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon input-circle-left">
-                                                            {{ form_label(formProfile.lastName) }}
-                                                        </span>
-                                                        {{ form_widget(formProfile.lastName) }}
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    {{ form_errors(formProfile.email) }}
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon input-circle-left">
-                                                            {{ form_label(formProfile.email) }}
-                                                        </span>
-                                                        {{ form_widget(formProfile.email) }}
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    {{ form_errors(formProfile.mobileNumber) }}
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon input-circle-left">
-                                                            {{ form_label(formProfile.mobileNumber, "Number") }}
-                                                        </span>
-                                                        {{ form_widget(formProfile.mobileNumber) }}
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon input-circle-left">
-                                                            {{ form_label(formProfile.address) }}
-                                                        </span>
-                                                        {{ form_widget(formProfile.address) }}
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon input-circle-left">
-                                                            {{ form_label(formProfile.city) }}
-                                                        </span>
-                                                        {{ form_widget(formProfile.city) }}
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon input-circle-left">
-                                                            {{ form_label(formProfile.country) }}
-                                                        </span>
-                                                        {{ form_widget(formProfile.country) }}
-                                                    </div>
-                                                </div>
+                                                {% for row in formProfile %}
+                                                    {% if row != formProfile._token %}
+                                                        <div class="form-group
+                                                        {% if form_errors(row) %}
+                                                            has-error
+                                                        {% endif %}
+                                                        ">
+                                                            {{ form_errors(row) }}
+                                                            <div class="input-group">
+                                                            <span class="input-group-addon input-circle-left">
+                                                                {{ form_label(row) }}
+                                                            </span>
+                                                                    {{ form_widget(row) }}
+                                                            </div>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
                                                 <div class="margiv-top-10">
                                                     <button type="submit" class="btn green"> Save Changes </button>
                                                     <h4> {{ updateStatus }} </h4>
                                                 </div>
                                                 {{ form_end(formProfile) }}
-                                                </form>
                                             </div>
                                             <!-- CHANGE AVATAR TAB -->
                                             <div class="tab-pane" id="tab_1_2">
@@ -146,24 +104,6 @@
                                                 </form>
                                             </div>
                                             <!-- END CHANGE AVATAR TAB -->
-                                            <!-- CHANGE PASSWORD TAB -->
-                                            <div class="tab-pane" id="tab_1_3">
-                                                <form action="#">
-                                                    <div class="form-group">
-                                                        <label class="control-label">Current Password</label>
-                                                        <input type="password" class="form-control" /> </div>
-                                                    <div class="form-group">
-                                                        <label class="control-label">New Password</label>
-                                                        <input type="password" class="form-control" /> </div>
-                                                    <div class="form-group">
-                                                        <label class="control-label">Re-type New Password</label>
-                                                        <input type="password" class="form-control" /> </div>
-                                                    <div class="margin-top-10">
-                                                        <a href="javascript:;" class="btn green"> Change Password </a>
-                                                        <a href="javascript:;" class="btn default"> Cancel </a>
-                                                    </div>
-                                                </form>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>

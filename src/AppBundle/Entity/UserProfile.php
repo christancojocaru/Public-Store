@@ -5,11 +5,13 @@ namespace AppBundle\Entity;
 
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="user_profile")
+ * @UniqueEntity(fields={"email"}, message="This email is assigned to another user!")
  */
 class UserProfile
 {
@@ -38,8 +40,8 @@ class UserProfile
     private $email;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
-     * @Assert\Length(min = 8, max = 9, minMessage = "Mobil number is too short!", maxMessage = "Number is too long!")
+     * @ORM\Column(type="text", nullable=true)
+     * @Assert\Length(min = 10, max = 10, exactMessage="Mobile Number should have exactly 10 numbers!")
      * @Assert\Regex(pattern="/^[0-9]*$/", message="Insert number only!")
      */
     private $mobileNumber;
