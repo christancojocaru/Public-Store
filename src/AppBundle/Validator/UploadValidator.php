@@ -15,11 +15,16 @@ class UploadValidator
     const PRICE = 2;
     const STOCK = 3;
     const DECIMAL = 4;
+
     /**
      * @var EntityManagerInterface
      */
     private $em;
 
+    /**
+     * @param $data
+     * @return array
+     */
     public function validate($data)
     {
         $errors = [];
@@ -58,7 +63,7 @@ class UploadValidator
         }
         //check if exists by name in database
         $productRepository = $this->em->getRepository(Product::class);
-        $products = $productRepository->checkProductName($namesUnique);
+        $products = $productRepository->checkProductName($namesUnique);//return products which are already in database by name
         if (!empty($products)) {
             $namesExist = array_intersect($names, $products);
             foreach ($namesExist as $key => $value) {
@@ -106,6 +111,4 @@ class UploadValidator
     {
         $this->em = $em;
     }
-
-
 }

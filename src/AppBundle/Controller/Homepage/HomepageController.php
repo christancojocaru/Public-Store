@@ -4,7 +4,6 @@
 namespace AppBundle\Controller\Homepage;
 
 
-use AppBundle\Entity\Product;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 

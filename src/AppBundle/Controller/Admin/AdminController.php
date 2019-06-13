@@ -3,20 +3,11 @@
 
 namespace AppBundle\Controller\Admin;
 
-use AppBundle\Entity\Categories;
+
 use AppBundle\Entity\Product;
 use AppBundle\Form\ProductForm;
-use AppBundle\Service\ModifyProduct;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -38,7 +29,6 @@ class AdminController extends Controller
     {
         $this->em = $entityManager;
     }
-
 
     /**
      * @Route("/", name="admin_homepage_action")
@@ -72,11 +62,7 @@ class AdminController extends Controller
             return new Response("Product was successfully created!");
         }
 
-        return $this->render(
-            "admin/create.html.twig", [
-                "form" => $form->createView()
-            ]
-        );
+        return $this->render("admin/create.html.twig", ["form" => $form->createView()]);
     }
 
     /**

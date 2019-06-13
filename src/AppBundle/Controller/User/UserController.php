@@ -25,7 +25,7 @@ class UserController extends Controller
      */
     public function cartAction()
     {
-        $currentUser= $this->get('security.token_storage')->getToken()->getUser();
+        $currentUser= $this->getUser();
         $carts = $this->getDoctrine()->getRepository(Cart::class)->findBy(['user' =>$currentUser]);
 
         return $this->render(

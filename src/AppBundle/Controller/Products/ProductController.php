@@ -6,6 +6,7 @@ namespace AppBundle\Controller\Products;
 
 use AppBundle\Entity\Categories;
 use AppBundle\Entity\Product;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,20 +19,26 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProductController extends Controller
 {
     /**
+     * @var EntityManagerInterface
+     */
+    private $em;
+
+    /**
      * @Route("/department/{id}", name="department_action")
      * @param $id
      * @return Response
      */
     public function departmentAction($id)
     {
-        $categories = $this->getDoctrine()->getRepository(Categories::class)->findAllByDepartment($id);
+        $categories = $this->em->getRepository(Categories::class)->findAllByDepartment($id);
+        /** @var Categories $category */
         foreach ($categories as $category) {
-            $products[$category->getName()] = $this->getDoctrine()->getRepository(Product::class)->findBy(["category" => $category->getId()]);
+            $data[$category->getName()] = $this->em->getRepository(Product::class)->findBy(["category" => $category->getId()]);
         }
 
         return $this->render(
             "products/department.html.twig", [
-                "categories" => $products
+                "categories" => $data
             ]
         );
     }
@@ -43,7 +50,7 @@ class ProductController extends Controller
      */
     public function categoryAction($id)
     {
-        $products = $this->getDoctrine()->getRepository(Product::class)->findAllByCategory($id);
+        $products = $this->em->getRepository(Product::class)->findAllByCategory($id);
 
         return $this->render(
             'products/category.html.twig',[
@@ -65,5 +72,14 @@ class ProductController extends Controller
                 "product" => $product
             ]
         );
+    }
+
+    /**
+     * @param EntityManagerInterface $entityManager
+     * @required
+     */
+    public function getProductRepository(EntityManagerInterface $entityManager)
+    {
+        $this->em = $entityManager;
     }
 }

@@ -18,6 +18,7 @@ class HashPasswordListener implements EventSubscriber
 
     /**
      * HashPasswordListener constructor.
+     * @param UserPasswordEncoderInterface $passwordEncoder
      */
     public function __construct(UserPasswordEncoderInterface $passwordEncoder)
     {

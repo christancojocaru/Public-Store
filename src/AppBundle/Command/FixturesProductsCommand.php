@@ -118,5 +118,4 @@ class FixturesProductsCommand extends Command
     {
         $this->entityManager = $entityManager;
     }
-
 }

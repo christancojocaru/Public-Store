@@ -1,6 +1,8 @@
 <?php
 
+
 namespace AppBundle\Controller\Security;
+
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,6 +33,7 @@ class LoginController extends Controller
 
     /**
      * @Route("/logout", name="security_logout")
+     * @throws \Exception
      */
     public function logoutAction()
     {

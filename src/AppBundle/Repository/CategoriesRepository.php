@@ -6,27 +6,17 @@ namespace AppBundle\Repository;
 
 use AppBundle\Entity\Categories;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 
 class CategoriesRepository extends EntityRepository
 {
+    /**
+     * @return QueryBuilder
+     */
     public function createAlphabeticalQueryBuilder()
     {
         return $this->createQueryBuilder('categories')
             ->orderBy('categories.name', 'ASC');
-    }
-
-
-    public function findByName($name)
-    {
-        /**
-         * @param $name
-         * return mixed
-         */
-        return $this->createQueryBuilder('d')
-            ->where("d.name = :name")
-            ->setParameter("name", $name)
-            ->getQuery()
-            ->execute();
     }
 
     /**
@@ -56,6 +46,10 @@ class CategoriesRepository extends EntityRepository
             ->execute();
     }
 
+    /**
+     * @param $categoryName
+     * @return bool
+     */
     public function checkCategoriesName($categoryName)
     {
         if ($this->findBy(["name" => $categoryName])) {

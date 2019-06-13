@@ -4,32 +4,15 @@
 namespace AppBundle\Repository;
 
 
-use AppBundle\Entity\Categories;
 use AppBundle\Entity\Product;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\NonUniqueResultException;
 
 class ProductsRepository extends EntityRepository
 {
-    public function findByName($name)
-    {
-        /**
-         * @param $name
-         * return mixed
-         */
-        return $this->createQueryBuilder('p')
-            ->where("p.name = :name")
-            ->setParameter("name", $name)
-            ->getQuery()
-            ->execute();
-    }
-
-    public function findOneByName($name)
-    {
-        $product["name"] = $name;
-        return $this->findOneBy($product);
-    }
-
+    /**
+     * @param $categoryId
+     * @return mixed
+     */
     public function findAllByCategory($categoryId)
     {
         return $this->createQueryBuilder('p')
@@ -39,6 +22,10 @@ class ProductsRepository extends EntityRepository
             ->execute();
     }
 
+    /**
+     * @param $productName
+     * @return array
+     */
     public function checkProductName($productName)
     {
         $result = [];
