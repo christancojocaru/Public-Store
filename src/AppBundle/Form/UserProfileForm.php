@@ -7,7 +7,6 @@ namespace AppBundle\Form;
 use AppBundle\Entity\UserProfile;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -20,7 +19,7 @@ class UserProfileForm extends AbstractType
             ->add('firstName', TextType::class, $this->attrs())
             ->add('lastName', TextType::class, $this->attrs())
             ->add('email', EmailType::class, $this->attrs())
-            ->add('mobileNumber', TelType::class, $this->attrs())
+            ->add('mobileNumber', TextType::class, $this->attrs())
             ->add('address', TextType::class, $this->attrs())
             ->add('city', TextType::class, $this->attrs())
             ->add('country', TextType::class, $this->attrs());

@@ -22,9 +22,9 @@
     <!-- BEGIN LOGIN -->
     <div class="content">
         <!-- BEGIN REGISTRATION FORM -->
-        {{ form_start(form) }}
         <h3 class="font-green">Sign Up</h3>
         <p class="hint"> Enter your account details below: </p>
+        {{ form_start(form) }}
         <div class="form-group">
             {{ form_label(form.username, 'Username', {'label_attr' : {'class' : 'control-label visible-ie8 visible-ie9'}}) }}
             {{ form_errors(form.username) }}
