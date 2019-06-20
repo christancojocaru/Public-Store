@@ -2,7 +2,6 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link href="{{ asset('css/bootstrap-fileinput.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('css/profile.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('css/ladda-themeless.min.css') }}" rel="stylesheet" type="text/css" />
 {% endblock %}
@@ -115,8 +114,6 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('js/functions.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('js/bootstrap-fileinput.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/jquery.sparkline.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/profile.min.js') }}" type="text/javascript"></script>
 

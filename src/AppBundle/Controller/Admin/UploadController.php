@@ -28,11 +28,11 @@ class UploadController extends Controller
      */
     public function uploadAction(Request $request, UploadRequestHandler $requestHandler, UploadValidator $validator)
     {
-        if ($_FILES['file']['type'] != 'text/csv') {
+        if ($_FILES['upload']['type'] != 'text/csv') {
             return new Response("File of this type cannot be handled!", 500);
         }
 
-        $file = $request->files->get('file')->getPathname();
+        $file = $request->files->get('upload')->getPathname();
         try {
             $data = $requestHandler->getData($file);
         }catch (\Exception $exception) {

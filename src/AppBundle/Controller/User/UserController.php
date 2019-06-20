@@ -53,7 +53,7 @@ class UserController extends Controller
             $updateStatus = "DONE!";
         }
         return $this->render(
-            'user/profile.html.twig', [
+            'user/account.html.twig', [
             'formProfile' => $formProfile->createView(),
             'updateStatus' => $updateStatus
         ]);
