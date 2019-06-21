@@ -4,6 +4,14 @@
 .alert p:first-of-type, .panel h3:first-of-type {
     color: black !important;
 }
-.panel-body input:first-of-type, span:first-of-type{
+.panel-body input:first-of-type, .panel-body span:first-of-type{
     margin: 0 10px;
+}
+
+.form-group span {
+    width: 10%;
+}
+
+.input-group {
+    width: 1000px;
 }

@@ -37,7 +37,7 @@ class UploadValidator
             //check if field price is correct
             if ( !isset($errors[$rowKey + 1][self::PRICE + 1]) ) {
                 if ($rowValue[self::PRICE] <= 0 ) {
-                    $errors[$rowKey + 1][self::PRICE + 1] = "Price '".$rowValue[self::PRICE]."' <= than 0";
+                    $errors[$rowKey + 1][self::PRICE + 1] = "'".$rowValue[self::PRICE]."' less or equal than 0";
                     if ($this->checkDecimal($rowValue[self::PRICE])) {
                         $errors[$rowKey + 1][self::PRICE + 1] .= " & only ".self::DECIMAL.' decimals';
                     };
@@ -47,13 +47,13 @@ class UploadValidator
             }
             //check if field stock is correct
             if ( !isset($errors[$rowKey + 1][self::STOCK + 1]) && intval($rowValue[self::STOCK] <= 0 )) {
-                $errors[$rowKey + 1][self::STOCK +1] = "Stock '".$rowValue[self::STOCK]."' <= than 0";
+                $errors[$rowKey + 1][self::STOCK +1] = "'".$rowValue[self::STOCK]."' less or equal than 0";
             }
             //check if field category exist in Database
             if ( !isset($errors[$rowKey + 1][self::CATEGORY + 1]) ) {
                 $categoryRepository = $this->em->getRepository(Categories::class);
                 if ($categoryRepository->checkCategoriesName($rowValue[self::CATEGORY])) {
-                    $errors[$rowKey + 1][self::CATEGORY + 1] = "Category '".$rowValue[self::CATEGORY]."' don't exist in Database";
+                    $errors[$rowKey + 1][self::CATEGORY + 1] = "'".$rowValue[self::CATEGORY]."' don't exist in Database";
                 }
             }
 
@@ -65,7 +65,7 @@ class UploadValidator
         //check if are duplicates by name in input file
         if (count($namesDuplicate) > 1) {
             foreach ($namesDuplicate as $key => $value) {
-                $errors[$key][self::NAME + 1] = "Name '".$value."' is duplicate";
+                $errors[$key][self::NAME + 1] = "'".$value."' is duplicate";
             }
         }
         //check if exists by name in database
@@ -75,9 +75,9 @@ class UploadValidator
             $namesExist = array_intersect($names, $products);
             foreach ($namesExist as $key => $value) {
                 if ( !isset($errors[$key][self::NAME + 1]) ) {
-                    $errors[$key][self::NAME + 1] = "Name '".$value."' is duplicate & exist in DB";
+                    $errors[$key][self::NAME + 1] = "'".$value."' is duplicate & exist in Database";
                 }else {
-                    $errors[$key][self::NAME + 1] = "Name '".$value."' exist in DB";
+                    $errors[$key][self::NAME + 1] = "'".$value."' exist in Database";
                 }
             }
         }

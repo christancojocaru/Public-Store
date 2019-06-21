@@ -1,6 +1,4 @@
-$(".form-group span").css("width", '10%');
 
-$(".input-group").css("width", '1000px');
 
 $("#addToCart").click(function (e) {
     e.preventDefault();
@@ -90,19 +88,38 @@ $("#btnupload").click(function (e) {
                     });
                     $('#uploadResponse').append(panel);
                 });
-                closeAction();
-                hint();
+                if (noOfErrors > 0) {
+                    hint();
+                }
             },
         });
     }
 });
 
 function hint() {
+    const spanContainer = document.querySelector('#noOfErrors');
+    const allPanels = parseInt(spanContainer.textContent);
+    const success = "Great job, your csv it's ready for implementing!";
+
     $(".panel-body div input").click(function () {
         let allCheckboxs = $(this).parent().siblings().length + 1;
         let allCheckboxsChecked = $(this).parents("div.panel-body").find("input:checked").length;
         if (allCheckboxs === allCheckboxsChecked) {
             $(this).parents("div.panel-info").find("button.close").click();
+        }
+
+        let panelsHidden = $("#uploadResponse").find("div.panel-info:hidden").length;
+        if (allPanels === panelsHidden) {
+            ReactDOM.render(success, document.querySelector('#errorrParag'));
+        }
+    });
+    $(".panel-heading").find('.close').click(function (e) {
+        e.preventDefault();
+        $(this).parent().parent().attr('hidden', 'true');
+        ReactDOM.render(spanContainer.textContent - 1, spanContainer);
+        let panelHidden = $("#uploadResponse").find("div.panel-info:hidden").length;
+        if (allPanels === panelHidden) {
+            ReactDOM.render(success, document.querySelector('#errorrParag'));
         }
     });
 }
@@ -141,13 +158,6 @@ function countErrors(obj) {
     return keys.length;
 }
 
-function closeAction() {
-    $(".panel-heading").find('.close').click(function (e) {
-        e.preventDefault();
-        $(this).parent().parent().attr('hidden', 'true');
-    });
-}
-
 function getPanel() {
     let panel = $("<div>").addClass('panel panel-info');
     let heading = $("<div>").addClass('panel-heading');
@@ -169,9 +179,11 @@ function getPanel() {
 }
 
 function getAlert(type, noOfErrors) {
-    let div = $("<div>").addClass("alert alert-"+type);
-    div.attr("role", "alert");
-    let text = (type === "success") ? "Great job, your csv it's ready for implementing!" : `Your csv have ${noOfErrors} errors, please review them and upload again until has no errors!`;
-    let p = $("<p>").text(text);
+    let div = $("<div>").addClass("alert alert-"+type).attr("role", "alert");
+
+    let success = $("<p>").text("Great job, your csv it's ready for implementing!");
+    let errorSpan = $("<span>").attr("id", "noOfErrors").text(noOfErrors);
+    let error = $("<p>").attr("id", "errorrParag").append("Your csv have ", errorSpan, " errors, please review them and upload again until has no errors!");
+    let p = (type === "success") ? success : error;
     return div.append(p);
 }

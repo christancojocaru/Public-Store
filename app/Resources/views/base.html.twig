@@ -49,9 +49,15 @@
                 <script src="{{ asset('js/bootstrap-switch.min.js') }}" type="text/javascript"></script>
                 <script src="{{ asset('js/app.min.js') }}" type="text/javascript"></script>
                 <script src="{{ asset('js/layout.min.js') }}" type="text/javascript"></script>
-                <script src="{{ asset('js/functions.js') }}" type="text/javascript"></script>
                 <script src="{{ asset('js/bootstrap-fileinput.js') }}" type="text/javascript"></script>
 
+                <!-- Reactjs -->
+                <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+                <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+                <script src="{{ asset('js/reactjs/myreact.js') }}"></script>
+
+                <!-- My js Functions -->
+                <script src="{{ asset('js/functions.js') }}" type="text/javascript"></script>
 
 
                 {% if is_granted("ROLE_ADMIN") %}
