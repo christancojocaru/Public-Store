@@ -140,33 +140,31 @@
                                 </div>
                                 <div class="modal-body">
                                         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
-                                        <div class="row">
-                                            <div class="text-center">
-                                                <!-- The fileinput-button span is used to style the file input field as button -->
+                                    <div class="row">
+                                        <div class="text-center">
+                                            <!-- The fileinput-button span is used to style the file input field as button -->
 
-                                                <div class="fileinput fileinput-new" data-provides="fileinput">
-                                                    <div class="input-group input-large">
-                                                        <div class="uneditable-input input-fixed input-medium" data-trigger="fileinput">
-                                                            <i class="fa fa-file fileinput-exists"></i>&nbsp;
-                                                            <span class="fileinput-filename"></span>
-                                                        </div>
-                                                        <span class="input-group-addon btn default btn-file">
-                                                                            <span class="fileinput-new"> Select file </span>
-                                                                            <span class="fileinput-exists"> Change </span>
-                                                                            <input type="hidden" value="" name="..."><input type="file" name="" id="fileupload" > </span>
-                                                        <a href="javascript:;" id="remove" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
-                                                        <div id="btnupload" class="input-group-addon btn blue fileinput-exists" data-url="{{ path('admin_upload_action') }}">
-                                                            <span> Validation </span>
-                                                        </div>
+                                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                <div class="input-group input-large">
+                                                    <div class="uneditable-input input-fixed input-medium" data-trigger="fileinput">
+                                                        <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                                                        <span class="fileinput-filename"></span>
+                                                    </div>
+                                                    <span class="input-group-addon btn default btn-file">
+                                                                        <span class="fileinput-new"> Select file </span>
+                                                                        <span class="fileinput-exists"> Change </span>
+                                                                        <input type="hidden" value="" name="..."><input type="file" name="" id="fileupload" > </span>
+                                                    <a href="javascript:;" id="remove" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                                                    <div id="btnvalidation" class="input-group-addon btn blue fileinput-exists" data-url="{{ path('admin_validation_action') }}">
+                                                        <span> Validation </span>
                                                     </div>
                                                 </div>
-
                                             </div>
+
                                         </div>
-                                        <!-- The table listing the response -->
-                                        <table class="table">
-                                            <tbody id="uploadResponse"> </tbody>
-                                        </table>
+                                    </div>
+                                    <!-- The table listing the response -->
+                                    <div id="uploadResponse"> </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn dark btn-outline" data-dismiss="modal">Close</button>

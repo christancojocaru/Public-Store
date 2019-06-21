@@ -4,7 +4,7 @@
 namespace AppBundle\Controller\Admin;
 
 
-use AppBundle\Service\UploadRequestHandler;
+use AppBundle\Service\UploadRequest;
 use AppBundle\Validator\UploadValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,14 +19,18 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class UploadController extends Controller
 {
+    /** @var UploadRequest */
+    private $uploadRequest;
+
+    /** @var UploadValidator */
+    private $validator;
+
     /**
-     * @Route("/upload", name="admin_upload_action", methods={"POST"})
+     * @Route("/validation", name="admin_validation_action", methods={"POST"})
      * @param Request $request
-     * @param UploadRequestHandler $requestHandler
-     * @param UploadValidator $validator
      * @return JsonResponse|Response
      */
-    public function uploadAction(Request $request, UploadRequestHandler $requestHandler, UploadValidator $validator)
+    public function validationAction(Request $request)
     {
         if ($_FILES['upload']['type'] != 'text/csv') {
             return new Response("File of this type cannot be handled!", 500);
@@ -34,12 +38,51 @@ class UploadController extends Controller
 
         $file = $request->files->get('upload')->getPathname();
         try {
-            $data = $requestHandler->getData($file);
+            $data = $this->uploadRequest->getData($file);
         }catch (\Exception $exception) {
             return new Response($exception->getMessage(), $exception->getCode());
         }
-        $errors = $validator->validate($data);
+        $errors = $this->validator->validate($data);
 
         return new JsonResponse($errors);
+    }
+
+    /**
+     * @Route("/upload", name="admin_upload_action", methods={"POST"})
+     * @param Request $request
+     * @return Response
+     */
+    public function uploadAction(Request $request)
+    {
+        if ($_FILES['upload']['type'] != 'text/csv') {
+            return new Response("File of this type cannot be handled!", 500);
+        }
+
+        $file = $request->files->get('upload')->getPathname();
+        try {
+            $data = $this->uploadRequest->getData($file);
+        }catch (\Exception $exception) {
+            return new Response($exception->getMessage(), $exception->getCode());
+        }
+
+        return new Response("Merge");
+    }
+
+    /**
+     * @param UploadRequest $uploadRequest
+     * @required
+     */
+    public function setUploadRequestHandler(UploadRequest $uploadRequest)
+    {
+        $this->uploadRequest = $uploadRequest;
+    }
+
+    /**
+     * @param UploadValidator $validator
+     * @required
+     */
+    public function setValidator(UploadValidator $validator)
+    {
+        $this->validator = $validator;
     }
 }

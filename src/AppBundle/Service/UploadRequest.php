@@ -6,7 +6,7 @@ namespace AppBundle\Service;
 
 use Exception as ExceptionAlias;
 
-class UploadRequestHandler
+class UploadRequest
 {
     const MAX_ROWS = 100;
 

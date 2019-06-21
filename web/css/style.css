@@ -15,3 +15,18 @@
 .input-group {
     width: 1000px;
 }
+
+.panel-heading div {
+    float:right;
+}
+
+.panel-heading div button {
+    float:right;
+    margin:5px 10px;
+}
+button[data-color="red"] {
+    background-image: url(../img/close-red.png)!important;
+}
+button[data-color="black"] {
+     background-image: url(../img/close-black.png)!important;
+ }

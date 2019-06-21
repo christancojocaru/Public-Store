@@ -43,9 +43,9 @@ $("#cart_table").on('click', '.delete', function (e) {
 
 $("#remove").click(function (e) {
     e.preventDefault();
-    let table = $("#uploadResponse");
-    table.empty();
-    // table.parent().children()[0].remove();
+    let div = $("#uploadResponse");
+    ReactDOM.unmountComponentAtNode(document.querySelector("div#uploadResponse"));
+    div.empty();
 });
 
 $("#fileupload").change(function () {
@@ -56,8 +56,9 @@ $("#fileupload").change(function () {
     }
 });
 
-$("#btnupload").click(function (e) {
+$("#btnvalidation").click(function (e) {
     e.preventDefault();
+    ReactDOM.unmountComponentAtNode(document.querySelector("div#uploadResponse"));
     $("#uploadResponse").empty();
     let data = $('#fileupload').prop('files')[0];
     if (data) {
@@ -72,12 +73,14 @@ $("#btnupload").click(function (e) {
             processData: false,
             contentType: false,
             converters: {"text json": jQuery.parseJSON},
-            success: function (success) {
-                let noOfErrors = countErrors(success);
-                let type = (noOfErrors > 0) ? "info" : "success";
+            success: function (data) {
+                let noOfErrors = countErrors(data);
+                let type = (noOfErrors > 0) ? "danger" : "success";
                 $('#uploadResponse').append(getAlert(type, noOfErrors));
 
-                $.each(success, function (rowNumber, rowValues) {
+
+
+                $.each(data, function (rowNumber, rowValues) {
                     let panel = getPanel();
                     panel.find('h3').text('Row ' + rowNumber);
                     $.each(rowValues, function (column, value) {
@@ -97,31 +100,35 @@ $("#btnupload").click(function (e) {
 });
 
 function hint() {
-    const spanContainer = document.querySelector('#noOfErrors');
+    const spanContainer = document.querySelector('#errors');
     const allPanels = parseInt(spanContainer.textContent);
-    const success = "Great job, your csv it's ready for implementing!";
 
     $(".panel-body div input").click(function () {
-        let allCheckboxs = $(this).parent().siblings().length + 1;
-        let allCheckboxsChecked = $(this).parents("div.panel-body").find("input:checked").length;
+        let allCheckboxs = $(this).parents("div.panel-danger").find("div.panel-body div").length;
+        let allCheckboxsChecked = $(this).parents("div.panel-danger").find("div.panel-body input:checked").length;
         if (allCheckboxs === allCheckboxsChecked) {
-            $(this).parents("div.panel-info").find("button.close").click();
-        }
-
-        let panelsHidden = $("#uploadResponse").find("div.panel-info:hidden").length;
-        if (allPanels === panelsHidden) {
-            ReactDOM.render(success, document.querySelector('#errorrParag'));
+            setTimeout(function(){
+                $('span.click-me').css("display", "none");
+                $('button[data-color="red"]').css('display', 'none');
+                $('button[data-color="black"]').css('display', 'inline-block');
+            }, 10000);
+            $(this).parents("div.panel-danger").find("div div span:first").css("display", 'inline');
+            $(this).parents("div.panel-danger").find("button[data-color='black']").css("display", "none");
+            $(this).parents("div.panel-danger").find("button[data-color='red']").css("display", "inline-block");
         }
     });
-    $(".panel-heading").find('.close').click(function (e) {
-        e.preventDefault();
-        $(this).parent().parent().attr('hidden', 'true');
+    $(".panel-heading div button.close").click(function () {
+        $(this).parents("div.panel-danger").attr('hidden', 'true');
         ReactDOM.render(spanContainer.textContent - 1, spanContainer);
-        let panelHidden = $("#uploadResponse").find("div.panel-info:hidden").length;
-        if (allPanels === panelHidden) {
-            ReactDOM.render(success, document.querySelector('#errorrParag'));
-        }
+        success(allPanels);
     });
+}
+
+function success(allPanels) {
+    let panelHidden = $("#uploadResponse").find("div.panel-danger:hidden").length;
+    if (allPanels === panelHidden) {
+        ReactDOM.render(React.createElement(UploadSuccessButton), document.querySelector("#uploadResponse"));
+    }
 }
 
 function getBody(column, value) {
@@ -159,17 +166,27 @@ function countErrors(obj) {
 }
 
 function getPanel() {
-    let panel = $("<div>").addClass('panel panel-info');
+    let panel = $("<div>").addClass('panel panel-danger');
     let heading = $("<div>").addClass('panel-heading');
     let body = $("<div>").addClass('panel-body');
-
-    let cancel = $("<button>").attr({
-        'class' : 'close',
+    let span = $("<span>").css('display', 'none').addClass('click-me').text("Click me for better view->");
+    let cancel_black = $("<button>").attr({
         'type' : 'button',
-        'id' : 'close'
-        });
+        'class' : 'close',
+        'data-color' : 'black'
+    }).css('display', 'inline-block');
+    let cancel_red = $("<button>").attr({
+        'type' : 'button',
+        'class' : 'close',
+        'data-color' : 'red'
+    }).css('display', 'none');
     let h3 = $("<h3>").addClass('panel-title');
-    heading.append(cancel);
+    let div = $("<div>");
+    div.append(cancel_black);
+    div.append(cancel_red);
+    div.append(span);
+
+    heading.append(div);
     heading.append(h3);
 
     panel.append(heading);
@@ -181,8 +198,8 @@ function getPanel() {
 function getAlert(type, noOfErrors) {
     let div = $("<div>").addClass("alert alert-"+type).attr("role", "alert");
 
-    let success = $("<p>").text("Great job, your csv it's ready for implementing!");
-    let errorSpan = $("<span>").attr("id", "noOfErrors").text(noOfErrors);
+    let success = $("<p>").text("Great job, your csv it's ready for upload!");
+    let errorSpan = $("<span>").attr("id", "errors").text(noOfErrors);
     let error = $("<p>").attr("id", "errorrParag").append("Your csv have ", errorSpan, " errors, please review them and upload again until has no errors!");
     let p = (type === "success") ? success : error;
     return div.append(p);
