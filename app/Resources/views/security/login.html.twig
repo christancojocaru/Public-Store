@@ -1,4 +1,9 @@
 {% extends 'base.html.twig' %}
+{% if (lastUsername and error is not null and error.messageKey == "Invalid credentials.") %}
+    {% set autofocus = true %}
+{% else %}
+    {% set autofocus = false %}
+{% endif %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -20,9 +25,9 @@
                     </div>
                 {% endif %}
                 <div class="form-group">
-                    <input class="form-control form-control-solid placeholder-no-fix" {{ lastUsername ? '' : 'autofocus'}} type="text" autocomplete="off" placeholder="Username" value="{{ lastUsername ? lastUsername : '' }}" name="login_form[_username]" /> </div>
+                    <input class="form-control form-control-solid placeholder-no-fix" {{ autofocus ? '' : 'autofocus'}} type="text" autocomplete="off" placeholder="Username" value="{{ lastUsername ? lastUsername : '' }}" name="login_form[_username]" /> </div>
                 <div class="form-group">
-                    <input class="form-control form-control-solid placeholder-no-fix" {{ lastUsername ? 'autofocus' : '' }} type="password" autocomplete="off" placeholder="Password" name="login_form[_password]" /> </div>
+                    <input class="form-control form-control-solid placeholder-no-fix" {{ autofocus ? 'autofocus' : '' }} type="password" autocomplete="off" placeholder="Password" name="login_form[_password]" /> </div>
                 <div class="form-actions">
                     <button type="submit" class="btn green uppercase">Login</button>
                 </div>
