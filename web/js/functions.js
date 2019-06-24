@@ -43,9 +43,8 @@ $("#cart_table").on('click', '.delete', function (e) {
 
 $("#remove").click(function (e) {
     e.preventDefault();
-    let div = $("#uploadResponse");
     ReactDOM.unmountComponentAtNode(document.querySelector("div#uploadResponse"));
-    div.empty();
+    $("#uploadResponse").empty();
 });
 
 $("#fileupload").change(function () {
@@ -99,6 +98,12 @@ $("#btnvalidation").click(function (e) {
     }
 });
 
+function timeout() {
+    $('span.click-me').css("display", "none");
+    $('button[data-color="red"]').css('display', 'none');
+    $('button[data-color="black"]').css('display', 'inline-block');
+}
+
 function hint() {
     const spanContainer = document.querySelector('#errors');
     const allPanels = parseInt(spanContainer.textContent);
@@ -107,11 +112,7 @@ function hint() {
         let allCheckboxs = $(this).parents("div.panel-danger").find("div.panel-body div").length;
         let allCheckboxsChecked = $(this).parents("div.panel-danger").find("div.panel-body input:checked").length;
         if (allCheckboxs === allCheckboxsChecked) {
-            setTimeout(function(){
-                $('span.click-me').css("display", "none");
-                $('button[data-color="red"]').css('display', 'none');
-                $('button[data-color="black"]').css('display', 'inline-block');
-            }, 10000);
+            setTimeout(timeout, 10000);
             $(this).parents("div.panel-danger").find("div div span:first").css("display", 'inline');
             $(this).parents("div.panel-danger").find("button[data-color='black']").css("display", "none");
             $(this).parents("div.panel-danger").find("button[data-color='red']").css("display", "inline-block");
