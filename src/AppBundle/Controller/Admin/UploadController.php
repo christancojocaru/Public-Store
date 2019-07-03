@@ -32,7 +32,9 @@ class UploadController extends Controller
      */
     public function validationAction(Request $request)
     {
-        if ($_FILES['upload']['type'] != 'text/csv') {
+        $mimes = array('application/vnd.ms-excel','text/plain','text/csv','text/tsv');
+
+        if ( in_array($_FILES['upload']['type'], $mimes) ) {
             return new Response("File of this type cannot be handled!", 500);
         }
 
