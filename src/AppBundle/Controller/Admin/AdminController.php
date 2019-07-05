@@ -36,7 +36,7 @@ class AdminController extends Controller
      */
     public function adminHomepageAction()
     {
-        $products = $this->em->getRepository(Product::class)->findBy([], ['name' => 'ASC']);
+        $products = $this->em->getRepository(Product::class)->findBy([], ['name' => 'ASC'], 50);
 
         return $this->render(
             "admin/homepage.html.twig", [
