@@ -34,7 +34,7 @@ class UploadController extends Controller
     {
         $mimes = array('application/vnd.ms-excel','text/plain','text/csv','text/tsv');
 
-        if ( in_array($_FILES['upload']['type'], $mimes) ) {
+        if ( !in_array($_FILES['upload']['type'], $mimes) ) {
             return new Response("File of this type cannot be handled!", 500);
         }
 
