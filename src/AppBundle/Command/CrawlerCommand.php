@@ -39,6 +39,7 @@ class CrawlerCommand extends Command
         $data = array();
         $allProductsName = array();
         foreach ($departments as $dEQ => $department) {
+            echo PHP_EOL.'Dep '.$dEQ.PHP_EOL;
             $departmentUrl = self::URL.$this->extractDepartmentsLink($crawler, $dEQ);
             $departmentClient = new Client();
             $departmentCrawler = $departmentClient->request('GET', $departmentUrl);
@@ -55,10 +56,14 @@ class CrawlerCommand extends Command
 
                 if ( $subCategories ) {
                     foreach ($subCategories as $scEQ => $subCategory) {
-//                        echo 'SecCat'.$scEQ.' / ';
+                        echo 'SecCat'.$scEQ.' / ';
                         $subCategoriesUrl = $this->extractCategoriesLink($categoriesCrawler, $scEQ);
                         $subCategoriesClient = new Client();
                         $subCategoriesCrawler = $subCategoriesClient->request('GET', $subCategoriesUrl);
+
+                        $subSubCategories = $this->checkSubCategory($subCategoriesCrawler);
+                        if ($subSubCategories)continue;
+
                         $productsName = $this->extractProductName($subCategoriesCrawler);
                         $productsBestPrice = $this->extractProductPrice($subCategoriesCrawler);
 
@@ -73,7 +78,7 @@ class CrawlerCommand extends Command
                     }
 
                 }else{
-//                    echo 'Cat '.$cEQ.' / ';
+                    echo 'Cat '.$cEQ.' / ';
                     $productsName = $this->extractProductName($categoriesCrawler);
                     $productsBestPrice = $this->extractProductPrice($categoriesCrawler);
 

@@ -28,7 +28,7 @@
         "symfony/swiftmailer-bundle": "^2.6.4",
         "symfony/symfony": "3.4.*",
         "twig/twig": "^1.0||^2.0",
-        "ext-fileinfo": "7.3.*",
+        "ext-fileinfo": ">=1",
         "symfony/dom-crawler": "3.*",
         "fabpot/goutte": "^3.2"
     },
