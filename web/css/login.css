@@ -1,0 +1,125 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Raleway', sans-serif;
+    background: #364150;;
+}
+
+.uppercase {
+    text-transform: uppercase !important;
+}
+
+.login {
+    position: absolute;
+    width: 40vw;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    top: 40vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+}
+
+.logo {
+    margin-bottom: 5vh;
+}
+
+.content {
+    flex: 2;
+    background: #fff;
+    width: inherit;
+}
+
+.form-title {
+    color: #32c5d2;
+    text-align: center;
+    margin: 2vh 0;
+}
+
+.alert {
+    text-align: center;
+    font-size: 14px;
+    color: #721c24;
+    background-color: #f8d7da;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid #f5c6cb;
+    border-radius: .25rem;
+}
+
+form {
+    padding: 10px 30px 30px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-input {
+    box-shadow: none;
+    background-color: #dde3ec;
+    height: 43px;
+    color: #8290a3;
+    border: 1px solid #dde3ec;
+    width: 92%;
+    padding: 6px 12px;
+}
+
+.form-actions {
+    padding: 15px 0;
+}
+
+.form-actions button {
+    cursor: pointer;
+    width: 80px;
+    height: 40px;
+    color: #32c5d2;
+    background: transparent;
+    border: 2px solid #32c5d2;
+}
+
+.create-account {
+    width: inherit;
+    display: flex;
+    align-items: center;
+    height: 5vh;
+    background: #6c7a8d;
+}
+
+.create-account p, a {
+    margin: auto;
+}
+
+a#register-btn {
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: 0.1s ease-in;
+    color: #c3cedd;
+}
+
+a#register-btn:hover {
+    font-size: 16px;
+    transition: 0.3s ease-in-out;
+}
+
+.copyright {
+    margin-top: 2vh;
+    font-size: 15px;
+    color: #7a8ca5;
+}
+
+@media screen and (max-width: 500px) {
+    .login {
+        width: 80vw;
+    }
+}
+
+@media screen and (min-width: 1025px) {
+    .login {
+        width: 20vw;
+    }
+}
