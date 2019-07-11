@@ -69,3 +69,14 @@ swiftmailer:
 sensio_framework_extra:
    router:
         annotations: false
+
+#Doctrine MongoDB
+doctrine_mongodb:
+    connections:
+        default:
+            server: "%mongodb_server%"
+            options: {}
+    default_database: test_database
+    document_managers:
+        default:
+            auto_mapping: true
