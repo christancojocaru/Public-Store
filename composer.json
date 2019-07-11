@@ -30,7 +30,9 @@
         "twig/twig": "^1.0||^2.0",
         "ext-fileinfo": ">=1",
         "symfony/dom-crawler": "3.*",
-        "fabpot/goutte": "^3.2"
+        "fabpot/goutte": "^3.2",
+        "doctrine/mongodb-odm-bundle": "^3.5",
+        "alcaeus/mongo-php-adapter": "^1.1"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.0",
@@ -66,6 +68,11 @@
         },
         "branch-alias": {
             "dev-master": "3.4-dev"
+        }
+    },
+    "config": {
+        "platform": {
+            "ext-mongo": "1.6.16"
         }
     }
 }
