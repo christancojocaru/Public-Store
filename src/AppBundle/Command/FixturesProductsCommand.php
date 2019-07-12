@@ -7,6 +7,7 @@ use AppBundle\Entity\Departments;
 use AppBundle\Entity\Product;
 use AppBundle\Entity\User;
 use AppBundle\Entity\UserProfile;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,10 +20,11 @@ class FixturesProductsCommand extends Command
      */
     protected static $defaultName = 'app:fixture.load';
 
-    /**
-     * @var EntityManagerInterface
-     */
+    /** @var EntityManagerInterface */
     private $entityManager;
+
+    /** @var DocumentManager */
+    private $documentManager;
 
 
     protected function configure()
@@ -32,6 +34,8 @@ class FixturesProductsCommand extends Command
 
     protected function execute(InputInterface $input,OutputInterface  $output)
     {
+        $time_pre = microtime(true);
+
         foreach ($this->departments() as $department => $categories) {
             $newDepartment = new Departments();
             $newDepartment->setName($department);
@@ -44,15 +48,26 @@ class FixturesProductsCommand extends Command
                 $this->entityManager->persist($newCategory);
 
                 foreach ($products as $product) {
+                    $stock = rand(1, 30);
+                    $price = rand(100, 100000) / 100;
+
                     $newProduct = new Product();
                     $newProduct->setName($product);
-                    $newProduct->setStock(rand(1, 30));
-                    $newProduct->setPrice(rand(100, 100000) / 100);
+                    $newProduct->setStock($stock);
+                    $newProduct->setPrice($price);
                     $newProduct->setCategory($newCategory);
                     $this->entityManager->persist($newProduct);
+
+                    $newProduct = new \AppBundle\Document\Product();
+                    $newProduct->setName($product);
+                    $newProduct->setStock($stock);
+                    $newProduct->setPrice($price);
+                    $this->documentManager->persist($newProduct);
                 }
             }
         }
+
+        $this->documentManager->flush();
 
         $newUserProfile = new UserProfile();
         $newUserProfile->setFirstName("cristi");
@@ -72,6 +87,11 @@ class FixturesProductsCommand extends Command
         $this->entityManager->persist($newUser);
 
         $this->entityManager->flush();
+
+        $time_post = microtime(true);
+        $exec_time = $time_post - $time_pre;
+        $output->writeln("Fixtures Load Successfully!");
+        $output->writeln(sprintf('Execution time was : %s seconds', intval($exec_time)));
     }
 
     private function departments()
@@ -117,5 +137,14 @@ class FixturesProductsCommand extends Command
     public function setEntityManager(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
+    }
+
+    /**
+     * @param DocumentManager $documentManager
+     * @required
+     */
+    public function setDocumentManager(DocumentManager $documentManager)
+    {
+        $this->documentManager = $documentManager;
     }
 }
