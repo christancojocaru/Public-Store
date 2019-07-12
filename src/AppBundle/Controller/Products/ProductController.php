@@ -4,6 +4,7 @@
 namespace AppBundle\Controller\Products;
 
 
+use AppBundle\Document\Product as DocumentProduct;
 use AppBundle\Entity\Categories;
 use AppBundle\Entity\Product;
 use Doctrine\ORM\EntityManagerInterface;
@@ -65,11 +66,21 @@ class ProductController extends Controller
      */
     public function showAction($id)
     {
-        $product = $this->getDoctrine()->getRepository(Product::class)->find($id);
+        /** @var Product $entityProduct */
+        $entityProduct = $this->getDoctrine()->getRepository(Product::class)->find($id);
+
+        /** @var DocumentProduct $documentProduct */
+        $documentProduct = $this->get('doctrine_mongodb')
+            ->getRepository(DocumentProduct::class)
+            ->findOneByName($entityProduct->getName());
+
+        if ($entityProduct->getPrice() != $documentProduct->getPrice()) {
+            return new Response("Products aren't the same");
+        }
 
         return $this->render(
             'products/show.html.twig', [
-                "product" => $product
+                "product" => $entityProduct
             ]
         );
     }
