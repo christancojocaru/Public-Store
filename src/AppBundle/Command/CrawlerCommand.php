@@ -97,7 +97,7 @@ class CrawlerCommand extends Command
         $time_post = microtime(true);
         $exec_time = $time_post - $time_pre;
         $output->writeln($message);
-        $output->writeln(sprintf('Execution time was : %s .', $exec_time));
+        $output->writeln(sprintf('Execution time was : %s seconds', intval($exec_time)));
     }
 
     private function checkSubCategory($crawler)
