@@ -26,6 +26,27 @@ class Product
     protected $price;
 
     /**
+     * @MongoDB\Field(type="integer")
+     */
+    protected $stock;
+
+    /**
+     * @return mixed
+     */
+    public function getStock()
+    {
+        return $this->stock;
+    }
+
+    /**
+     * @param mixed $stock
+     */
+    public function setStock($stock): void
+    {
+        $this->stock = $stock;
+    }
+
+    /**
      * @return mixed
      */
     public function getId()
