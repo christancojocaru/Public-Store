@@ -19,10 +19,8 @@ class FixturesProductsCommand extends Command
      * @var string
      */
     protected static $defaultName = 'app:fixture.load';
-
     /** @var EntityManagerInterface */
     private $entityManager;
-
     /** @var DocumentManager */
     private $documentManager;
 

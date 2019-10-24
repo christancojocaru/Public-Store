@@ -2,9 +2,11 @@
 
 namespace AppBundle\Command;
 
+use AppBundle\Document\CrawlerProduct;
 use AppBundle\Entity\Categories;
 use AppBundle\Entity\Departments;
 use AppBundle\Entity\Product;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Goutte\Client;
 use Symfony\Component\Console\Command\Command;
@@ -18,6 +20,8 @@ class CrawlerCommand extends Command
     protected static $defaultName = 'app:crawler';
     /** @var EntityManagerInterface */
     private $entityManager;
+    /** @var DocumentManager */
+    private $documentManager;
 
     const URL = 'https://altex.ro';
 
@@ -38,7 +42,8 @@ class CrawlerCommand extends Command
 
         $data = array();
         $allProductsName = array();
-        foreach ($departments as $dEQ => $department) {
+//        foreach ($departments as $dEQ => $department) {
+        $dEQ = 0;
             echo PHP_EOL.'Dep '.$dEQ.PHP_EOL;
             $departmentUrl = self::URL.$this->extractDepartmentsLink($crawler, $dEQ);
             $departmentClient = new Client();
@@ -47,7 +52,8 @@ class CrawlerCommand extends Command
             $categories = $this->extractCategories($departmentCrawler);
 
         $data[$departments[$dEQ]] = array();
-            foreach ($categories as $cEQ => $category) {
+        $cEQ = 0;
+//            foreach ($categories as $cEQ => $category) {
                 $categoriesUrl = $this->extractCategoriesLink($departmentCrawler, $cEQ);
                 $categoriesClient = new Client();
                 $categoriesCrawler = $categoriesClient->request('GET', $categoriesUrl);
@@ -91,12 +97,12 @@ class CrawlerCommand extends Command
                         $data[$departments[$dEQ]][$categories[$cEQ]][$key] = $product;
                     }
                 }
-            }
-        }
-        $message = $this->addData($data);
+//            }
+//        }
+//        $message = $this->addToDatabases($data);
         $time_post = microtime(true);
         $exec_time = $time_post - $time_pre;
-        $output->writeln($message);
+//        $output->writeln(PHP_EOL.$message);
         $output->writeln(sprintf('Execution time was : %s seconds', intval($exec_time)));
     }
 
@@ -173,7 +179,7 @@ class CrawlerCommand extends Command
             ->extract(array('content'));
     }
 
-    private function addData($data)
+    private function addToDatabases($data)
     {
         $noOfProducts = 0;
         $noOfCategories = 0;
@@ -193,12 +199,24 @@ class CrawlerCommand extends Command
                 foreach ($products as $product) {
 //                    echo "Name ".$product[0]."  ////    ";
 //                    echo "Price".$product[1].PHP_EOL;
+                    $stock = rand(1, 30);
+
                     $newProduct = new Product();
                     $newProduct->setName($product[0]);
-                    $newProduct->setStock(rand(1, 30));
+                    $newProduct->setStock($stock);
                     $newProduct->setPrice($product[1]);
                     $newProduct->setCategory($newCategory);
                     $this->entityManager->persist($newProduct);
+
+                    $newCrawlerProduct = new CrawlerProduct();
+                    $newCrawlerProduct->setDepartment($department);
+                    $newCrawlerProduct->setCategory($category);
+                    $newCrawlerProduct->setName($product[0]);
+                    $newCrawlerProduct->setStock($stock);
+                    $newCrawlerProduct->setPrice($product[1]);
+                    $newCrawlerProduct->setDate();
+                    $this->documentManager->persist($newCrawlerProduct);
+                    $this->documentManager->flush();
                 }
                 $noOfProducts += count($products);
             }
@@ -216,5 +234,14 @@ class CrawlerCommand extends Command
     public function setEntityManager(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
+    }
+
+    /**
+     * @param DocumentManager $documentManager
+     * @required
+     */
+    public function setDocumentManager(DocumentManager $documentManager)
+    {
+        $this->documentManager = $documentManager;
     }
 }

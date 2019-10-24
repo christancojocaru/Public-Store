@@ -4,8 +4,12 @@
 namespace AppBundle\Controller\Admin;
 
 
+use AppBundle\Document\CrawlerProduct;
+use AppBundle\Document\Product as DocumentProduct;
+use AppBundle\DocumentRepository\CrawlerProductRepository;
 use AppBundle\Entity\Product;
 use AppBundle\Form\ProductForm;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,14 +24,17 @@ use Symfony\Component\Routing\Annotation\Route;
 class AdminController extends Controller
 {
     private $em;
+    private $dm;
 
     /**
      * ActionController constructor.
      * @param EntityManagerInterface $entityManager
+     * @param DocumentManager $documentManager
      */
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, DocumentManager $documentManager)
     {
         $this->em = $entityManager;
+        $this->dm = $documentManager;
     }
 
     /**
@@ -90,5 +97,20 @@ class AdminController extends Controller
                 "success" => $success
             ]
         );
+    }
+
+    /**
+     * @Route("/document/{id}/", name="admin_edit_action")
+     * @param $id
+     * @return void
+     */
+    public function seeProductsPrice($id)
+    {
+        /** @var DocumentProduct $documentProduct */
+        $documentProduct = $this->get('doctrine_mongodb')
+            ->getRepository(CrawlerProduct::class)
+            ->findAllOrderedByName();
+
+        var_dump($documentProduct);
     }
 }

@@ -5,18 +5,10 @@ namespace AppBundle\Entity;
 
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ProductsRepository")
- * @ORM\Table(
- *     name="products",
- *     uniqueConstraints={@ORM\UniqueConstraint(columns={"name", "category_id"})}
- *     )
- * @UniqueEntity(
- *     fields={"name", "category"},
- *     message="Category for given name already exists in database."
- * )
+ * @ORM\Table(name="products")
  */
 class Product
 {
@@ -41,6 +33,11 @@ class Product
      * @ORM\Column(type="integer")
      */
     private $stock;
+
+    /**
+     * @ORM\Column(type="string", length=1024)
+     */
+    private $image;
 
     /**
      * @ORM\ManyToOne(
@@ -77,6 +74,14 @@ class Product
     public function setStock($stock)
     {
         $this->stock = $stock;
+    }
+
+    /**
+     * @param mixed $image
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
     }
 
     /**
@@ -117,6 +122,14 @@ class Product
     public function getStock()
     {
         return $this->stock;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getImage()
+    {
+        return $this->image;
     }
 
     /**
