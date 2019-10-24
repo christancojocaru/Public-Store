@@ -5,6 +5,8 @@ Symfony Standard Edition
 [Installing & Setting up the Symfony Framework][15] page to find a replacement
 that fits you best.
 
+Login as Administrator to see full power
+
 Welcome to the Symfony Standard Edition - a fully-functional Symfony
 application that you can use as the skeleton for your new applications.
 
